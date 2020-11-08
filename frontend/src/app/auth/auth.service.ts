@@ -1,0 +1,116 @@
+import {Injectable} from '@angular/core';
+import {MsalService} from '@azure/msal-angular';
+
+import {OAuthSettings} from './oauth';
+import {User} from '../models/auth/user';
+import {Client} from '@microsoft/microsoft-graph-client';
+import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
+import {Toaster} from 'ngx-toast-notifications';
+import {Router} from '@angular/router';
+
+@Injectable({
+  providedIn: 'root'
+})
+
+export class AuthService {
+  public authenticated: boolean;
+  public user: User;
+
+  constructor(
+    private msalService: MsalService,
+    private  toaster: Toaster,
+    private router: Router
+  ) {
+    this.authenticated = this.msalService.getAccount() != null;
+    this.getUser().then((user) => {
+      this.user = user;
+    });
+  }
+
+  async signIn(): Promise<void> {
+    const result = await this.msalService.loginPopup(OAuthSettings)
+      .catch((err) => {
+        if (err.errorCode === 'user_cancelled') {
+          this.toaster.open({
+            text: 'Щоб продовжити вхід потрібно натиснути Дозволити',
+            caption: '😢   Упс...',
+            duration: 4000,
+            type: 'warning'
+          });
+        } else {
+          this.toaster.open({
+            text: 'Щось пішло не так. Будь ласка,спробуйте ще раз',
+            caption: '😢   Упс...',
+            duration: 4000,
+            type: 'warning'
+          });
+        }
+      });
+    if (result) {
+      this.router.navigateByUrl('/home');
+      this.authenticated = true;
+      this.user = await this.getUser();
+    }
+  }
+
+  signOut(): void {
+    this.msalService.logout();
+    this.user = null;
+    this.authenticated = false;
+  }
+
+  async getAccessToken(): Promise<string> {
+    const result = await this.msalService.acquireTokenSilent(OAuthSettings)
+      .catch((err) => {
+        this.toaster.open({
+          text: 'Нам не вдалося увійти з вашими данними. Будь ласка,спробуйте ще раз',
+          caption: '😢 Упс...',
+          duration: 4000,
+          type: 'warning'
+        });
+      });
+
+    if (result) {
+      return result.accessToken;
+    }
+
+    this.authenticated = false;
+    return null;
+  }
+
+  private async getUser(): Promise<User> {
+    if (!this.authenticated) {
+      return null;
+    }
+
+    const graphClient = Client.init({
+
+      authProvider: async (done) => {
+        const token = await this.getAccessToken()
+          .catch((reason) => {
+            done(reason, null);
+          });
+
+        if (token) {
+          done(null, token);
+        } else {
+          done('Could not get an access token', null);
+        }
+      }
+    });
+
+    const graphUser: MicrosoftGraph.User = await graphClient
+      .api('/me')
+      .select('displayName,mail,userPrincipalName')
+      .get();
+    console.log(graphUser);
+    const user = new User();
+    user.displayName = graphUser.displayName;
+    user.email = graphUser.mail || graphUser.userPrincipalName;
+    console.log(graphUser);
+    // TODO: add getting avatar. Maybe you'll need to ask for more permissions. See oauth.ts
+    user.avatar = '/assets/mock.png';
+
+    return user;
+  }
+}
