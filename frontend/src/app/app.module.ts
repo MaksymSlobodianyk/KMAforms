@@ -11,9 +11,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
 import uk from '@angular/common/locales/uk';
 import {MsalModule} from '@azure/msal-angular';
-import { ToastService, AngularToastifyModule } from 'angular-toastify';
 import {environment} from '../environments/environment';
 import {ToastNotificationsModule} from 'ngx-toast-notifications';
+import {SharedModule} from "./shared/shared.module";
 
 registerLocaleData(uk);
 
@@ -25,7 +25,7 @@ registerLocaleData(uk);
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
+    SharedModule,
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
@@ -36,9 +36,10 @@ registerLocaleData(uk);
         authority: environment.authority,
         redirectUri: environment.redirectUri
       }
-    })
+    }),
+    AppRoutingModule
   ],
-  providers: [ToastService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
