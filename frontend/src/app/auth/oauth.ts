@@ -4,6 +4,6 @@ export const OAuthSettings = {
   appId: environment.clientId,
   redirectUri: environment.redirectUri,
   scopes: [
-    'user.read'
+    'user.read', 'openid'
   ]
 };
