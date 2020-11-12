@@ -1,0 +1,117 @@
+<div [formGroup]="item">
+  <div [formArrayName]="'questions'"
+       *ngFor="let item2 of questions(item).controls; let j = index;"
+  >
+    <div [formGroupName]="j">
+      <div *ngIf="item2.get('type').value === 'oneOf'">
+        <mat-form-field
+          appearance="standard"
+          class="long-input"
+        >
+          <mat-label>Question's title</mat-label>
+          <input matInput placeholder="Chapter's name" [formControlName]="'title'">
+          <mat-error *ngIf="item2.get('title').invalid">Question's title is required</mat-error>
+        </mat-form-field>
+
+        <div class="p-3">
+          <h4>Answers</h4>
+
+          <div [formArrayName]="'answers'"
+               *ngFor="let item3 of answers(item2).controls; let k = index;"
+          >
+            <mat-form-field
+              appearance="standard"
+              class="medium-input"
+            >
+              <mat-label>Answer's title</mat-label>
+              <input matInput placeholder="Answer's title" [formControl]="answers(item2).controls[k]">
+              <mat-error *ngIf="item2.get('title').invalid">Answer's title is required</mat-error>
+            </mat-form-field>
+          </div>
+
+          <button mat-raised-button
+                  color="accent"
+                  (click)="addAnswer(item2)"
+                  [disabled]="invalidPrevAnswers(item2)"
+          >
+            Add answer
+          </button>
+          <button mat-raised-button
+                  color="accent"
+                  class="m-3"
+                  (click)="removeAnswer(item2)"
+                  [disabled]="only2Answers(item2)"
+          >
+            Remove answer
+          </button>
+        </div>
+      </div>
+      <div *ngIf="item2.get('type').value === 'open'">
+        <mat-form-field
+          appearance="standard"
+          class="long-input"
+        >
+          <mat-label>Question's title</mat-label>
+          <input matInput placeholder="Chapter's name" [formControlName]="'title'">
+          <mat-error *ngIf="item2.get('title').invalid">Question's title is required</mat-error>
+        </mat-form-field>
+        <div>
+          <mat-form-field
+            appearance="standard"
+          >
+            <mat-label>Answer's min length</mat-label>
+            <input [type]="'number'" matInput
+                   placeholder="Answer's min length"
+                   [formControlName]="'minLength'">
+            <mat-error *ngIf="item2.get('minLength').invalid">Answer's min length is required and > 0</mat-error>
+          </mat-form-field>
+          <mat-form-field
+            appearance="standard"
+            class="m-3"
+          >
+            <mat-label>Answer's max length</mat-label>
+            <input [type]="'number'" matInput
+                   placeholder="Answer's max length"
+                   [formControlName]="'maxLength'">
+            <mat-error *ngIf="item2.get('maxLength').invalid">Answer's max length is required and < 1000</mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div *ngIf="item2.get('type').value === 'range'">
+        <mat-form-field
+          appearance="standard"
+          class="long-input"
+        >
+          <mat-label>Question's title</mat-label>
+          <input matInput placeholder="Chapter's name" [formControlName]="'title'">
+          <mat-error *ngIf="item2.get('title').invalid">Question's title is required</mat-error>
+        </mat-form-field>
+        <div>
+          <mat-form-field
+            appearance="standard"
+          >
+            <mat-label>Minimum of range</mat-label>
+            <input [type]="'number'" matInput
+                   placeholder="Minimum of range"
+                   [formControlName]="'min'">
+            <mat-error *ngIf="item2.get('min').invalid">Minimum of range is required</mat-error>
+          </mat-form-field>
+          <mat-form-field
+            appearance="standard"
+            class="m-3"
+          >
+            <mat-label>Maximum of range</mat-label>
+            <input [type]="'number'" matInput
+                   placeholder="Maximum of range"
+                   [formControlName]="'max'">
+            <mat-error *ngIf="item2.get('max').invalid">Maximum of range is required</mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <hr/>
+    </div>
+  </div>
+</div>
+

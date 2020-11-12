@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { registerLocaleData } from '@angular/common';
@@ -15,6 +15,9 @@ import {environment} from '../environments/environment';
 import {ToastNotificationsModule} from 'ngx-toast-notifications';
 import {SharedModule} from './shared/shared.module';
 import {TokenAppenderInterceptor} from './auth/token-appender.interceptor';
+import { CreateFormComponent } from './components/create-form/create-form.component';
+import { CreateChapterComponent } from './components/create-form/create-chapter/create-chapter.component';
+import { CreateQuestionComponent } from './components/create-form/create-chapter/create-question/create-question.component';
 
 registerLocaleData(uk);
 
@@ -28,12 +31,16 @@ const INTERCEPTOR_PROVIDER: Provider = {
   declarations: [
     AppComponent,
     LandingPageComponent,
-    MainPageComponent
+    MainPageComponent,
+    CreateFormComponent,
+    CreateChapterComponent,
+    CreateQuestionComponent
   ],
   imports: [
     BrowserModule,
     SharedModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
     ToastNotificationsModule,
