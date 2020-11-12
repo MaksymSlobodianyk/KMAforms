@@ -1,6 +1,7 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {AuthService} from '../auth/auth.service';
+import {environment} from '../../environments/environment';
+import {User} from '../models/auth/user';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +9,13 @@ import {AuthService} from '../auth/auth.service';
 export class AuthApiService {
 
   constructor(
-    private httpClient: HttpClient,
-    private authService: AuthService
+    private httpClient: HttpClient
   ) {
+  }
+
+  authenticate(): Promise<User> {
+    const params = new HttpParams();
+    return this.httpClient.post<User>(`${environment.baseURL}/api/register`, {params}).toPromise();
   }
 
 }

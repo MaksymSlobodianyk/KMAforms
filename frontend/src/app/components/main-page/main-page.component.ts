@@ -11,6 +11,8 @@ export class MainPageComponent implements OnInit {
   constructor(private authService: AuthService) {
   }
 
+  user = this.authService.user;
+
   ngOnInit(): void {
   }
 
