@@ -4,6 +4,7 @@ import {LandingPageComponent} from './components/landing-page/landing-page.compo
 import {MainPageComponent} from './components/main-page/main-page.component';
 import {AuthGuard} from './guards/auth.guard';
 import {LandingGuard} from './guards/landing.guard';
+import {CreateFormComponent} from "./components/create-form/create-form.component";
 
 const routes: Routes = [
   {
@@ -19,6 +20,11 @@ const routes: Routes = [
   {
     path: 'home',
     component: MainPageComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'create',
+    component: CreateFormComponent,
     canActivate: [AuthGuard]
   }
 ];

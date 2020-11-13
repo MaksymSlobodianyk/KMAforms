@@ -1,0 +1,44 @@
+<div class="container-fluid">
+  <form [formGroup]="form">
+    <mat-form-field
+      appearance="standard"
+      class="long-input"
+    >
+      <mat-label>Name of form</mat-label>
+      <input matInput
+             placeholder="Form's name"
+             [formControlName]="'title'">
+      <mat-error *ngIf="form.get('title').invalid">Name of form is required</mat-error>
+    </mat-form-field>
+
+    <app-create-chapter [form]="form"></app-create-chapter>
+
+    <button mat-raised-button
+            color="primary"
+            (click)="addChapter()"
+            [disabled]="form.invalid"
+    >
+      Add chapter
+    </button>
+
+    <button mat-raised-button
+            color="warn"
+            class="m-3"
+            (click)="removeChapter()"
+            [disabled]="isLastChapter"
+    >
+      Remove last chapter
+    </button>
+
+    <button mat-raised-button
+            color="accent"
+            class="m-3"
+            (click)="saveForm()"
+            [disabled]="form.invalid"
+    >
+      Save form
+    </button>
+
+  </form>
+</div>
+

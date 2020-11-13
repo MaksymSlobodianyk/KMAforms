@@ -1,0 +1,76 @@
+<div [formGroup]="form">
+  <mat-horizontal-stepper [linear]="false" #stepper>
+    <div [formArrayName]="'chapters'"
+         *ngFor="let item of chapters.controls; let i = index;"
+    >
+      <mat-step
+        [stepControl]="item"
+        [formGroupName]="i"
+      >
+
+        <ng-template matStepLabel>{{item.get('title').value}}</ng-template>
+        <div class="col-styling">
+          <mat-form-field
+            appearance="standard"
+            class="medium-input"
+          >
+            <mat-label>Name of chapter</mat-label>
+            <input matInput placeholder="Chapter's name" [formControlName]="'title'">
+            <mat-error *ngIf="item.get('title').invalid">Name of chapter is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field
+            appearance="standard"
+            class="long-input"
+          >
+            <mat-label>Description of chapter</mat-label>
+            <input matInput placeholder="Chapter's description" [formControlName]="'description'">
+            <mat-error *ngIf="item.get('description').invalid">Name of chapter is required</mat-error>
+          </mat-form-field>
+
+          <h3>Questions:</h3>
+
+          <app-create-question [chapter]="item"></app-create-question>
+
+          <div>
+            <button mat-raised-button
+                    color="accent"
+                    (click)="addQuestion(item, 'oneOf')"
+                    [disabled]="chapterIsInvalid(item)"
+            >
+              Add a "choose one" question
+            </button>
+
+            <button mat-raised-button
+                    color="accent"
+                    class="m-3"
+                    (click)="addQuestion(item, 'open')"
+                    [disabled]="chapterIsInvalid(item)"
+            >
+              Add an open question
+            </button>
+
+            <button mat-raised-button
+                    color="accent"
+                    class="m-3"
+                    (click)="addQuestion(item, 'range')"
+                    [disabled]="chapterIsInvalid(item)"
+            >
+              Add a "range" question
+            </button>
+
+            <button mat-raised-button
+                    color="warn"
+                    class="m-3"
+                    (click)="deleteLastQuestion(item)"
+                    [disabled]="isNoQuestion(item)"
+            >
+              Delete last question
+            </button>
+          </div>
+        </div>
+      </mat-step>
+    </div>
+  </mat-horizontal-stepper>
+</div>
+
