@@ -1,0 +1,123 @@
+<div
+  class="container-fluid"
+  *ngIf="questionnaire"
+>
+  <form [formGroup]="form">
+    <h1>{{questionnaire.title}}</h1>
+
+    <mat-horizontal-stepper [linear]="true" #stepper>
+      <div [formArrayName]="'chapters'"
+           *ngFor="let chapter of chapters.controls; let i = index;"
+      >
+        <mat-step
+          [stepControl]="chapter"
+          [formGroupName]="i"
+        >
+
+          <ng-template matStepLabel>{{questionnaire.chapters[i].title}}</ng-template>
+          <h2>{{questionnaire.chapters[i].title}}</h2>
+          <h5>{{questionnaire.chapters[i].description}}</h5>
+          <div class="col-styling ml-3">
+
+            <h5>Questions</h5>
+            <div [formArrayName]="'answers'"
+                 class="ml-3"
+                 *ngFor="let answer of answers(chapter).controls; let j = index;"
+            >
+              <h6>{{question(i,j).title}}</h6>
+              <div>
+                <div
+                  class="ml-3"
+                  *ngIf="question(i,j).type === 'oneOf'"
+                >
+
+                  <mat-radio-group
+                    class="d-flex flex-column mb-3"
+                    aria-label="Select an option"
+                    [formControlName]="j"
+                  >
+                    <mat-radio-button
+                      *ngFor="let choice of question(i,j).answers"
+                      [value]="choice"
+                    >
+                      {{choice}}
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+
+                <div
+                  class="ml-3"
+                  *ngIf="question(i,j).type === 'open'"
+                >
+                  <mat-form-field
+                    appearance="standard"
+                    class="long-input"
+                  >
+                    <mat-label>{{question(i,j).title}}</mat-label>
+                    <input matInput placeholder="Answer's title" [formControlName]="j">
+                    <mat-error *ngIf="answer.invalid">
+                      Answer's length must be from {{question(i,j).minLength}} to {{question(i,j).maxLength}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div
+                  class="ml-3"
+                  *ngIf="question(i,j).type === 'range'"
+                >
+                  <mat-form-field
+                    appearance="standard"
+                    class="short-input"
+                  >
+                    <input type="number" matInput placeholder="Answer's title" [formControlName]="j">
+                    <mat-error *ngIf="answer.invalid">
+                      Answer must be in the range of {{question(i,j).min}} - {{question(i,j).max}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <hr class="hr-50"/>
+              </div>
+
+            </div>
+          </div>
+
+          <button mat-raised-button
+                  color="primary"
+                  [disabled]="chapter.invalid && chapters.length === i+1"
+                  matStepperNext
+          >
+            Next chapter
+          </button>
+
+          <button mat-raised-button
+                  color="primary"
+                  class="ml-3"
+                  [disabled]="i === 0"
+                  matStepperPrevious
+          >
+            Prev chapter
+          </button>
+        </mat-step>
+      </div>
+    </mat-horizontal-stepper>
+
+    <button mat-raised-button
+            color="accent"
+            class="m-3"
+            (click)="saveForm()"
+    >
+      Save form
+    </button>
+
+  </form>
+</div>
+
+<div
+  class="container-fluid d-flex justify-content-center m-5"
+  *ngIf="!questionnaire"
+>
+  <mat-spinner color="accent"></mat-spinner>
+</div>
+
+

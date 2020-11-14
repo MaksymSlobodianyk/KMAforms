@@ -18,6 +18,7 @@ import {TokenAppenderInterceptor} from './auth/token-appender.interceptor';
 import { CreateFormComponent } from './components/create-form/create-form.component';
 import { CreateChapterComponent } from './components/create-form/create-chapter/create-chapter.component';
 import { CreateQuestionComponent } from './components/create-form/create-chapter/create-question/create-question.component';
+import { FillFormComponent } from './components/fill-form/fill-form.component';
 
 registerLocaleData(uk);
 
@@ -34,7 +35,8 @@ const INTERCEPTOR_PROVIDER: Provider = {
     MainPageComponent,
     CreateFormComponent,
     CreateChapterComponent,
-    CreateQuestionComponent
+    CreateQuestionComponent,
+    FillFormComponent
   ],
   imports: [
     BrowserModule,

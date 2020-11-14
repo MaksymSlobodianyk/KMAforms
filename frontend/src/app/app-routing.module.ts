@@ -5,6 +5,7 @@ import {MainPageComponent} from './components/main-page/main-page.component';
 import {AuthGuard} from './guards/auth.guard';
 import {LandingGuard} from './guards/landing.guard';
 import {CreateFormComponent} from "./components/create-form/create-form.component";
+import {FillFormComponent} from "./components/fill-form/fill-form.component";
 
 const routes: Routes = [
   {
@@ -25,6 +26,11 @@ const routes: Routes = [
   {
     path: 'create',
     component: CreateFormComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'fill/:id',
+    component: FillFormComponent,
     canActivate: [AuthGuard]
   }
 ];
