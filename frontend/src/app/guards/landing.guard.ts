@@ -18,7 +18,7 @@ export class LandingGuard implements CanActivate {
     if (!this.authService.authenticated) {
       return true;
     }
-    this.router.navigateByUrl('/home');
+    this.router.navigateByUrl('/me');
     return false;
   }
 }
