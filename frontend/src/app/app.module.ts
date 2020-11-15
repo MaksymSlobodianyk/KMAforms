@@ -48,7 +48,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
     RolesManagementComponent,
     PassedFormsListComponent,
     CreatedFormsListComponent,
-    SuggestedFormsListComponent
+    SuggestedFormsListComponent,
     FillFormComponent
   ],
   imports: [

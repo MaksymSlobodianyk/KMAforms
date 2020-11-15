@@ -20,7 +20,7 @@ import {MatRadioModule} from "@angular/material/radio";
     MatInputModule,
     MatToolbarModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
     MatProgressSpinnerModule,
     MatRadioModule
   ],
@@ -31,7 +31,7 @@ import {MatRadioModule} from "@angular/material/radio";
     MatButtonModule,
     MatToolbarModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
     MatProgressSpinnerModule,
     MatRadioModule
   ]
