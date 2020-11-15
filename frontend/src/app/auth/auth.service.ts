@@ -51,7 +51,7 @@ export class AuthService {
       });
 
     if (result) {
-      this.router.navigateByUrl('/home');
+      this.router.navigateByUrl('/me');
       this.authenticated = true;
       this.user = await this.getUser();
     }

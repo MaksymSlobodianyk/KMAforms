@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+  <mat-icon aria-hidden="false" aria-label="Example home icon" style="cursor: default">ballot</mat-icon>
+  <h1 style="cursor: default">KMAforms</h1>
+  <div>
+  <button [routerLink]="'/me'" mat-button>Мої опитники</button>
+  <button [routerLink]="'/me/create'" mat-button>Створити опитник</button>
+  <button [routerLink]="'/me/roles-management'" mat-button>Керування ролями</button>
+  <button [routerLink]="'/me/temp'" mat-button>Запропоновані опитники</button>
+  <button [routerLink]="'/me/passed'" mat-button>Пройдені опитники</button>
+  </div>
+  <span class = "filler"></span>
+  <mat-icon style="cursor: pointer" aria-hidden="false" aria-label="Example home icon" matTooltip="Log out" (click)="logout()">directions_run</mat-icon>
+</mat-toolbar>
