@@ -1,8 +1,7 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
-import {User} from '../models/auth/user';
-import {Observable} from 'rxjs';
+import {User} from '../shared/models/auth/user';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +17,4 @@ export class AuthApiService {
     const params = new HttpParams();
     return this.httpClient.post<User>(`${environment.baseURL}/api/register`, {params}).toPromise();
   }
-
-  getUserRole(): Observable<string> {
-    return this.httpClient.get<string>(`${environment.baseURL}/api/user/role`);
-  }
-
 }
