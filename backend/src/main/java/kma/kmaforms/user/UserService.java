@@ -26,4 +26,8 @@ public class UserService {
         var registeredUser = userRepository.findById(user.getEmail()).orElseThrow(NotFoundException::new);
         return registeredUser.getRole();
     }
+
+    public User getUserByEmail(String email) throws NotFoundException {
+        return userRepository.findById(email).orElseThrow(NotFoundException::new);
+    }
 }
