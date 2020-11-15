@@ -9,6 +9,7 @@ import {FormsListComponent} from './components/forms-list/forms-list.component';
 import {RolesManagementComponent} from './components/roles-management/roles-management.component';
 import {PassedFormsListComponent} from './components/passed-forms-list/passed-forms-list.component';
 import {SuggestedFormsListComponent} from './components/suggested-forms-list/suggested-forms-list.component';
+import {FillFormComponent} from "./components/fill-form/fill-form.component";
 
 const mainPageChildRoutes = [
   {
@@ -37,6 +38,11 @@ const mainPageChildRoutes = [
     path: 'passed',
     component: PassedFormsListComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'fill/:id',
+    component: FillFormComponent,
+    canActivate: [AuthGuard]
   }
 ];
 
@@ -58,8 +64,6 @@ const routes: Routes = [
     children: mainPageChildRoutes
   }
 ];
-
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

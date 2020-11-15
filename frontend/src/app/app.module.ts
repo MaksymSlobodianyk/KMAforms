@@ -24,6 +24,7 @@ import { RolesManagementComponent } from './components/roles-management/roles-ma
 import { PassedFormsListComponent } from './components/passed-forms-list/passed-forms-list.component';
 import { CreatedFormsListComponent } from './components/created-forms-list/created-forms-list.component';
 import { SuggestedFormsListComponent } from './components/suggested-forms-list/suggested-forms-list.component';
+import { FillFormComponent } from './components/fill-form/fill-form.component';
 
 registerLocaleData(uk);
 
@@ -48,6 +49,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
     PassedFormsListComponent,
     CreatedFormsListComponent,
     SuggestedFormsListComponent
+    FillFormComponent
   ],
   imports: [
     BrowserModule,

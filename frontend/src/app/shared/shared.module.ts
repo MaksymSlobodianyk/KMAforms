@@ -7,8 +7,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
-
-
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatRadioModule} from "@angular/material/radio";
 
 @NgModule({
   declarations: [],
@@ -21,6 +21,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatToolbarModule,
     MatIconModule,
     MatTooltipModule
+    MatProgressSpinnerModule,
+    MatRadioModule
   ],
   exports: [
     MatStepperModule,
@@ -30,6 +32,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatToolbarModule,
     MatIconModule,
     MatTooltipModule
+    MatProgressSpinnerModule,
+    MatRadioModule
   ]
 })
 export class SharedModule { }
