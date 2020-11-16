@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {CreateFormFormService} from "./services/create-form-form.service";
-import {FormArray, FormGroup} from "@angular/forms";
+import {CreateFormFormService} from './services/create-form-form.service';
+import {FormArray, FormGroup} from '@angular/forms';
+import {FormApiService} from '../../api-services/form-api.service';
+import {Toaster} from 'ngx-toast-notifications';
 
 @Component({
   selector: 'app-create-form',
@@ -12,7 +14,9 @@ export class CreateFormComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
-    private formService: CreateFormFormService
+    private formService: CreateFormFormService,
+    private formApiService: FormApiService,
+    private toaster: Toaster
   ) {
     this.form = this.formService.buildForm();
   }
@@ -20,25 +24,37 @@ export class CreateFormComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public saveForm(){
-    let resForm = this.form.value;
-    console.log(resForm)
+  public saveForm(): void {
+    this.formApiService.saveForm(this.formService.mapQuestionnaireToDto(this.form.value)).subscribe(response => {
+      this.toaster.open({
+        caption: '🥳   Форма успішно збережена',
+        duration: 4000,
+        type: 'success'
+      });
+    }, error => {
+      this.toaster.open({
+        text: error.message,
+        caption: '😢   Упс... Нам не вдалося зберегти вашу форму',
+        duration: 4000,
+        type: 'warning'
+      });
+    });
   }
 
-  get isLastChapter() {
-    let chapters = <FormArray>this.form.get('chapters')
-    return chapters.length == 1
+  get isLastChapter(): boolean {
+    const chapters = this.form.get('chapters') as FormArray;
+    return chapters.length === 1;
   }
 
-  public removeChapter() {
-    let chapters = <FormArray>this.form.get('chapters')
+  public removeChapter(): void {
+    const chapters = this.form.get('chapters') as FormArray;
     if (chapters.length > 1) {
-      chapters.removeAt(chapters.length - 1)
+      chapters.removeAt(chapters.length - 1);
     }
   }
 
-  public addChapter() {
-    let chapters = <FormArray>this.form.get('chapters')
-    chapters.push(this.formService.createChapter(chapters.length+1))
+  public addChapter(): void {
+    const chapters = this.form.get('chapters') as FormArray;
+    chapters.push(this.formService.createChapter(chapters.length + 1));
   }
 }

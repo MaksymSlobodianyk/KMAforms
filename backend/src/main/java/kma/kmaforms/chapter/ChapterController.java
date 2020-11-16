@@ -1,4 +1,4 @@
-package kma.kmaforms.user;
+package kma.kmaforms.chapter;
 
 import kma.kmaforms.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/user")
-public class UserController {
+public class ChapterController {
 
-    private UserService userService;
+    private ChapterService chapterService;
     private AuthService authService;
 
     @Autowired
-    public UserController(UserService userService, AuthService authService) {
-        this.userService = userService;
+    public ChapterController(ChapterService chapterService, AuthService authService) {
+        this.chapterService = chapterService;
         this.authService = authService;
     }
     

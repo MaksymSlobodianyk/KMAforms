@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {MsalService} from '@azure/msal-angular';
 
 import {OAuthSettings} from './oauth';
-import {User} from '../models/auth/user';
+import {User} from '../shared/models/auth/user';
 import {Client} from '@microsoft/microsoft-graph-client';
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 import {Toaster} from 'ngx-toast-notifications';
