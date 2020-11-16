@@ -26,6 +26,7 @@ public class Question {
     UUID id;
     String title;
     String type;
+    Integer position;
     String options;
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "chapter_id", nullable = false)
