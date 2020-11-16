@@ -46,7 +46,6 @@ public class QuestionnaireService {
                             .questionnaire(savedQuestionnaire)
                             .build()
             );
-            Integer questionNumber = 0;
             var chapterQuestions = chapter.getQuestions();
             for (int i = 0; i < chapterQuestions.size(); i++)
                 questionRepository.save(
