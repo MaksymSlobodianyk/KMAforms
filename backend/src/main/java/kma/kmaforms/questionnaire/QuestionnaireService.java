@@ -12,6 +12,8 @@ import kma.kmaforms.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class QuestionnaireService {
@@ -44,16 +46,17 @@ public class QuestionnaireService {
                             .questionnaire(savedQuestionnaire)
                             .build()
             );
-            chapter.getQuestions().forEach(question -> {
+            var chapterQuestions = chapter.getQuestions();
+            for (int i = 0; i < chapterQuestions.size(); i++)
                 questionRepository.save(
                         Question.builder()
-                                .title(question.getTitle())
-                                .type(question.getType())
-                                .options(question.getOptions())
+                                .title(chapterQuestions.get(i).getTitle())
+                                .type(chapterQuestions.get(i).getType())
+                                .position(i + 1)
+                                .options(chapterQuestions.get(i).getOptions())
                                 .chapter(savedChapter)
                                 .build()
                 );
-            });
         });
     }
 }
