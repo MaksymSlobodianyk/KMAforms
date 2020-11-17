@@ -1,7 +1,6 @@
 package kma.kmaforms.chapter.model;
 
 import kma.kmaforms.questionnaire.model.Questionnaire;
-import kma.kmaforms.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

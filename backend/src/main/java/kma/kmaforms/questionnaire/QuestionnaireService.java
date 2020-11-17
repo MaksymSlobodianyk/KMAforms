@@ -1,18 +1,23 @@
 package kma.kmaforms.questionnaire;
 
 import kma.kmaforms.chapter.ChapterRepository;
+import kma.kmaforms.chapter.dto.ChapterDetailsDto;
 import kma.kmaforms.chapter.model.Chapter;
 import kma.kmaforms.exceptions.NotFoundException;
 import kma.kmaforms.question.QuestionRepository;
+import kma.kmaforms.question.dto.QuestionDetailsDto;
 import kma.kmaforms.question.model.Question;
 import kma.kmaforms.questionnaire.dto.QuestionnaireCreationDto;
+import kma.kmaforms.questionnaire.dto.QuestionnaireDetailsDto;
+import kma.kmaforms.questionnaire.dto.QuestionnaireShortDetailsDto;
 import kma.kmaforms.questionnaire.model.Questionnaire;
-import kma.kmaforms.user.UserRepository;
 import kma.kmaforms.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -58,5 +63,50 @@ public class QuestionnaireService {
                                 .build()
                 );
         });
+    }
+
+    public List<QuestionnaireShortDetailsDto> getAll(String currentUserEmail) throws NotFoundException {
+        var currentUser = userService.getUserByEmail(currentUserEmail);
+        return questionnaireRepository.getAllByAuthor(currentUser)
+                .stream()
+                .map(questionnaire -> QuestionnaireShortDetailsDto
+                        .builder()
+                        .id(questionnaire.getId())
+                        .title(questionnaire.getTitle())
+                        .authorEmail(currentUserEmail)
+                        .authorDisplayName(currentUser.getDisplayName())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public QuestionnaireDetailsDto getQuestionnaireById(UUID questionnaireId, String currentUserEmail) throws NotFoundException {
+        var currentUser = userService.getUserByEmail(currentUserEmail);
+        var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
+        var chapters = chapterRepository.getAllByQuestionnaire(questionnaire);
+        return QuestionnaireDetailsDto.builder()
+                .id(questionnaire.getId())
+                .title(questionnaire.getTitle())
+                .authorDisplayName(currentUser.getDisplayName())
+                .authorEmail(currentUserEmail)
+                .chapters(chapterRepository.getAllByQuestionnaire(questionnaire)
+                        .stream()
+                        .map(chapter ->
+                                ChapterDetailsDto.builder()
+                                        .id(chapter.getId())
+                                        .title(chapter.getTitle())
+                                        .description(chapter.getDescription())
+                                        .questions(questionRepository.getAllByChapter(chapter)
+                                                .stream()
+                                                .map(question -> QuestionDetailsDto.builder()
+                                                        .id(question.getId())
+                                                        .title(question.getTitle())
+                                                        .type(question.getType())
+                                                        .options(question.getOptions())
+                                                        .build())
+                                                .collect(Collectors.toList()))
+                                        .build()
+                        ).collect(Collectors.toList())
+                )
+                .build();
     }
 }
