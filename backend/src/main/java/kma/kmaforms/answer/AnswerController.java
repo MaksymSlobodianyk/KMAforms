@@ -1,10 +1,12 @@
 package kma.kmaforms.answer;
 
+import kma.kmaforms.answer.dto.AnswerCreationDto;
 import kma.kmaforms.auth.AuthService;
+import kma.kmaforms.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -19,5 +21,13 @@ public class AnswerController {
         this.answerService = answerService;
         this.authService = authService;
     }
-    
+
+    @PostMapping
+    public void saveAnswers(@RequestBody List<AnswerCreationDto> answers) throws NotFoundException {
+        answerService.saveAnswers(answers,authService.getAuthorizedUser().getEmail());
+
+    }
+
+    ;
+
 }
