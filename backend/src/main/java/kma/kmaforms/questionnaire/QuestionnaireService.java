@@ -1,8 +1,11 @@
 package kma.kmaforms.questionnaire;
 
+import kma.kmaforms.answer.AnswerRepository;
+import kma.kmaforms.answer.dto.AnswerCreationDto;
 import kma.kmaforms.chapter.ChapterRepository;
 import kma.kmaforms.chapter.dto.ChapterDetailsDto;
 import kma.kmaforms.chapter.model.Chapter;
+import kma.kmaforms.exceptions.AlreadyFilledException;
 import kma.kmaforms.exceptions.NotFoundException;
 import kma.kmaforms.question.QuestionRepository;
 import kma.kmaforms.question.dto.QuestionDetailsDto;
@@ -12,6 +15,7 @@ import kma.kmaforms.questionnaire.dto.QuestionnaireDetailsDto;
 import kma.kmaforms.questionnaire.dto.QuestionnaireShortDetailsDto;
 import kma.kmaforms.questionnaire.model.Questionnaire;
 import kma.kmaforms.user.UserService;
+import kma.kmaforms.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +29,18 @@ public class QuestionnaireService {
     private QuestionnaireRepository questionnaireRepository;
     private ChapterRepository chapterRepository;
     private QuestionRepository questionRepository;
+    private AnswerRepository answerRepository;
     private UserService userService;
 
     @Autowired
-    public QuestionnaireService(QuestionnaireRepository questionnaireRepository, UserService userService, ChapterRepository chapterRepository, QuestionRepository questionRepository) {
+    public QuestionnaireService(QuestionnaireRepository questionnaireRepository, UserService userService,
+                                ChapterRepository chapterRepository, QuestionRepository questionRepository,
+                                AnswerRepository answerRepository) {
         this.questionnaireRepository = questionnaireRepository;
         this.userService = userService;
         this.chapterRepository = chapterRepository;
         this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
     }
 
     public void saveQuestionnaire(QuestionnaireCreationDto questionnaireDto, String currentUserEmail) throws NotFoundException {
@@ -79,10 +87,28 @@ public class QuestionnaireService {
                 .collect(Collectors.toList());
     }
 
-    public QuestionnaireDetailsDto getQuestionnaireById(UUID questionnaireId, String currentUserEmail) throws NotFoundException {
+    public void checkIfAlreadyAnswered(User user, Questionnaire questionnaire)
+            throws AlreadyFilledException {
+        var question = chapterRepository
+                .getAllByQuestionnaire(questionnaire)
+                .stream().findFirst()
+                .flatMap(ch ->
+                    questionRepository.getAllByChapter(ch)
+                            .stream().findFirst()
+                );
+        if (question.isPresent()) {
+            var a = answerRepository
+                    .getByQuestionAndAuthor(question.get(), user);
+            if (a.isPresent()) { throw new AlreadyFilledException();}
+        }
+    }
+
+    public QuestionnaireDetailsDto getQuestionnaireById(UUID questionnaireId, String currentUserEmail)
+            throws NotFoundException, AlreadyFilledException {
+
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
-        var chapters = chapterRepository.getAllByQuestionnaire(questionnaire);
+        checkIfAlreadyAnswered(currentUser, questionnaire);
         return QuestionnaireDetailsDto.builder()
                 .id(questionnaire.getId())
                 .title(questionnaire.getTitle())

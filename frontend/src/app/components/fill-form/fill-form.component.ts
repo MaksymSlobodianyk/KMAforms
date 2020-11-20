@@ -36,12 +36,20 @@ export class FillFormComponent implements OnInit {
     },
     error =>{
       this.toaster.open({
-        text: error.message,
-        caption: '😢   Упс... Нам не вдалося загрузити форму',
+        caption: FillFormComponent.handleErrorMessage(error.status),
         duration: 4000,
         type: 'warning'
       });
+      this.router.navigate(['/me'])
     })
+  }
+
+  private static handleErrorMessage(errorStatus: number) : string {
+    if (errorStatus === 409) {
+      return '😢   Упс... Ви вже пройшли цю форму форму'
+    } else {
+      return '😢   Упс... Нам не вдалося загрузити форму'
+    }
   }
 
   get chapters() {
