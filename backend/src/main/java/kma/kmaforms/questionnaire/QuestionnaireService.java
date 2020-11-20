@@ -79,6 +79,12 @@ public class QuestionnaireService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteQuestionnaireById(UUID questionnaireId, String currentUserEmail) throws NotFoundException {
+        var currentUser = userService.getUserByEmail(currentUserEmail);
+        var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
+        questionnaireRepository.delete(questionnaire);
+    }
+
     public QuestionnaireDetailsDto getQuestionnaireById(UUID questionnaireId, String currentUserEmail) throws NotFoundException {
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);

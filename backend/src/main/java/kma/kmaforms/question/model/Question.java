@@ -28,7 +28,7 @@ public class Question {
     String type;
     Integer position;
     String options;
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "chapter_id", nullable = false)
     Chapter chapter;
 }

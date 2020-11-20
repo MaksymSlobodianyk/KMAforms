@@ -6,6 +6,7 @@ import kma.kmaforms.questionnaire.dto.QuestionnaireCreationDto;
 import kma.kmaforms.questionnaire.dto.QuestionnaireDetailsDto;
 import kma.kmaforms.questionnaire.dto.QuestionnaireShortDetailsDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,12 @@ public class QuestionnaireController {
     @GetMapping(value = "/all")
     public List<QuestionnaireShortDetailsDto> getAllQuestionnaires() throws NotFoundException {
        return questionnaireService.getAll(authService.getAuthorizedUser().getEmail());
+    }
+
+    @DeleteMapping()
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteQuestionnaireById(@RequestParam UUID questionnaireId) throws NotFoundException {
+         questionnaireService.deleteQuestionnaireById(questionnaireId,authService.getAuthorizedUser().getEmail());
     }
 
     @GetMapping()
