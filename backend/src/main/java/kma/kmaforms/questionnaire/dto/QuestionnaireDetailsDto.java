@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,5 +19,7 @@ public class QuestionnaireDetailsDto {
     String title;
     String authorDisplayName;
     String authorEmail;
+    Date createdAt;
+    boolean isActivated;
     List<ChapterDetailsDto> chapters;
 }

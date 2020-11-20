@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -26,6 +27,10 @@ public class Questionnaire {
     )
     UUID id;
     String title;
+    @Column(name = "is_activated")
+    boolean isActivated;
+    @Column(name = "created_at")
+    Date createdAt;
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "author_email", nullable = false)
     User author;
