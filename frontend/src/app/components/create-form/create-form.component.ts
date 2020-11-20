@@ -3,6 +3,7 @@ import {CreateFormFormService} from './services/create-form-form.service';
 import {FormArray, FormGroup} from '@angular/forms';
 import {FormApiService} from '../../api-services/form-api.service';
 import {Toaster} from 'ngx-toast-notifications';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-create-form',
@@ -16,7 +17,8 @@ export class CreateFormComponent implements OnInit {
   constructor(
     private formService: CreateFormFormService,
     private formApiService: FormApiService,
-    private toaster: Toaster
+    private toaster: Toaster,
+    private router:Router
   ) {
     this.form = this.formService.buildForm();
   }
@@ -31,6 +33,7 @@ export class CreateFormComponent implements OnInit {
         duration: 4000,
         type: 'success'
       });
+      this.router.navigate(['/me'])
     }, error => {
       this.toaster.open({
         text: error.message,

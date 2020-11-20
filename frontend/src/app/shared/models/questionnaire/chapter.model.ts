@@ -3,6 +3,7 @@ import {OpenQuestion} from "./openQuestion.model";
 import {RangeQuestion} from "./rangeQuestion.model";
 
 export class Chapter {
+  id ?: string;
   title: string;
   description: string;
   questions: Array<Question>;

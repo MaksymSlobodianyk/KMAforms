@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Questionnaire} from "../../../shared/models/questionnaire.model";
-import {Chapter} from "../../../shared/models/chapter.model";
+import {Questionnaire} from "../../../shared/models/questionnaire/questionnaire.model";
+import {Chapter} from "../../../shared/models/questionnaire/chapter.model";
 
 @Injectable({
   providedIn: 'root'
