@@ -1,6 +1,7 @@
 package kma.kmaforms.questionnaire;
 
 import kma.kmaforms.auth.AuthService;
+import kma.kmaforms.exceptions.AlreadyFilledException;
 import kma.kmaforms.exceptions.NotFoundException;
 import kma.kmaforms.questionnaire.dto.QuestionnaireCreationDto;
 import kma.kmaforms.questionnaire.dto.QuestionnaireDetailsDto;
@@ -43,7 +44,8 @@ public class QuestionnaireController {
     }
 
     @GetMapping()
-    public QuestionnaireDetailsDto getQuestionnaireById(@RequestParam UUID questionnaireId) throws NotFoundException {
+    public QuestionnaireDetailsDto getQuestionnaireById(@RequestParam UUID questionnaireId)
+            throws NotFoundException, AlreadyFilledException {
         return questionnaireService.getQuestionnaireById(questionnaireId,authService.getAuthorizedUser().getEmail());
     }
 

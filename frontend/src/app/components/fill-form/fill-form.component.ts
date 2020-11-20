@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {Questionnaire} from "../../shared/models/questionnaire.model";
+import {Questionnaire} from "../../shared/models/questionnaire/questionnaire.model";
 import {AbstractControl, FormArray, FormGroup} from "@angular/forms";
 import {FillFormFormService} from "./services/fill-form-form.service";
-import {Question} from "../../shared/models/chapter.model";
+import {Question} from "../../shared/models/questionnaire/chapter.model";
+import {ActivatedRoute, Router} from "@angular/router";
+import {FormApiService} from "../../api-services/form-api.service";
+import {Toaster} from "ngx-toast-notifications";
 
 @Component({
   selector: 'app-fill-form',
@@ -11,53 +14,42 @@ import {Question} from "../../shared/models/chapter.model";
 })
 export class FillFormComponent implements OnInit {
 
-  public questionnaire: Questionnaire = {
-    title:'form',
-    chapters: [
-      {
-        title: 'C1',
-        description: 'gfndhtyjuk',
-        questions: [
-          {
-            title: '1?',
-            type: 'oneOf',
-            answers: [
-              '1', '2', '3'
-            ]
-          }
-        ]
-      },
-      {
-        title: 'C2',
-        description: '',
-        questions: [
-          {
-            title: '??',
-            type: 'open',
-            minLength: 10,
-            maxLength: 140
-          },
-          {
-            title: '???',
-            type: 'range',
-            min: 1,
-            max: 10
-          },
-        ]
-      }
-    ]
-  }
-
+  public questionnaireId : string;
+  public questionnaire: Questionnaire;
   public form: FormGroup;
 
 
   constructor(
-    private fillFormFormService: FillFormFormService
+    private fillFormFormService: FillFormFormService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private toaster: Toaster,
+    private formApiService: FormApiService
   ) {
-    this.form = this.fillFormFormService.buildForm(this.questionnaire)
+    this.questionnaireId =  this.route.snapshot.params.id;
   }
 
   ngOnInit(): void {
+    this.formApiService.getForm(this.questionnaireId).subscribe( data => {
+      this.questionnaire = FillFormComponent.processGetData(data);
+      this.form = this.fillFormFormService.buildForm(this.questionnaire)
+    },
+    error =>{
+      this.toaster.open({
+        caption: FillFormComponent.handleErrorMessage(error.status),
+        duration: 4000,
+        type: 'warning'
+      });
+      this.router.navigate(['/me'])
+    })
+  }
+
+  private static handleErrorMessage(errorStatus: number) : string {
+    if (errorStatus === 409) {
+      return '😢   Упс... Ви вже пройшли цю форму форму'
+    } else {
+      return '😢   Упс... Нам не вдалося загрузити форму'
+    }
   }
 
   get chapters() {
@@ -73,6 +65,63 @@ export class FillFormComponent implements OnInit {
   }
 
   public saveForm() {
-    console.log(this.form.value);
+    const ids = FillFormComponent.getArrayQuestionId(this.questionnaire);
+    const answers = FillFormComponent.getArrayAnswer(this.form.value)
+    const res = []
+    for (let i = 0; i < ids.length; i++) {
+      res.push({
+        ...ids[i],
+        ...answers[i]
+      })
+    }
+    this.formApiService.saveAnswers(res).subscribe(() => {
+      this.toaster.open({
+        caption: '🥳   Відповіді успішно збережені',
+        duration: 4000,
+        type: 'success'
+      });
+      this.router.navigate(['/me'])
+    }, error => {
+      this.toaster.open({
+        text: error.message,
+        caption: '😢   Упс... Нам не вдалося зберегти ваші відповіді',
+        duration: 4000,
+        type: 'warning'
+      });
+    })
+  }
+
+  private static getArrayQuestionId(questionnaire: Questionnaire): Array<{questionId: string}> {
+    const res: Array<{questionId: string}> = [];
+    questionnaire.chapters.forEach ( chapter => {
+      chapter.questions.forEach (q => res.push({questionId:q.id}))
+    })
+    return res;
+  }
+
+  private static getArrayAnswer(formResult: any): Array<{answer: string}> {
+    const res: Array<{answer: string}> = [];
+    formResult.chapters.forEach ( chapter => {
+      chapter.answers.forEach (ans => res.push({answer:ans}))
+    })
+    return res;
+  }
+
+  private static  processGetData(data: Questionnaire): Questionnaire {
+    data.chapters.forEach(chapter => {
+      chapter.questions = FillFormComponent.transformQuestions(chapter.questions)
+    })
+    return data
+  }
+
+  private static transformQuestions(questions: Array<Question>): Array<Question> {
+    for (let i = 0; i < questions.length; i++) {
+      let option = JSON.parse(questions[i].options)
+      questions[i] = {
+        ...questions[i],
+        ...option
+      }
+    }
+    return questions
   }
 }

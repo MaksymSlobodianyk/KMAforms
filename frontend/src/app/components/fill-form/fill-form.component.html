@@ -106,6 +106,7 @@
             color="accent"
             class="m-3"
             (click)="saveForm()"
+            [disabled]="form.invalid"
     >
       Save form
     </button>
