@@ -26,7 +26,7 @@ public class Chapter {
     UUID id;
     String title;
     String description;
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "questionnaire_id", nullable = false)
     Questionnaire questionnaire;
 }

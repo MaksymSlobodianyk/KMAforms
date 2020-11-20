@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -25,7 +26,7 @@ public class Questionnaire {
     )
     UUID id;
     String title;
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "author_email", nullable = false)
     User author;
 }
