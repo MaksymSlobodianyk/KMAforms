@@ -11,6 +11,6 @@ import java.util.UUID;
 
 @Repository
 public interface QuestionnaireRepository extends JpaRepository<Questionnaire, UUID> {
-    List<Questionnaire> getAllByAuthor(User author);
+    List<Questionnaire> getAllByAuthorOrderByCreatedAtDesc(User author);
     Optional<Questionnaire> getByIdAndAuthor(UUID id, User author);
 }

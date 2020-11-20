@@ -1,7 +1,6 @@
 package kma.kmaforms.questionnaire;
 
 import kma.kmaforms.answer.AnswerRepository;
-import kma.kmaforms.answer.dto.AnswerCreationDto;
 import kma.kmaforms.chapter.ChapterRepository;
 import kma.kmaforms.chapter.dto.ChapterDetailsDto;
 import kma.kmaforms.chapter.model.Chapter;
@@ -19,6 +18,7 @@ import kma.kmaforms.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -49,6 +49,8 @@ public class QuestionnaireService {
                 Questionnaire.builder()
                         .title(questionnaireDto.getTitle())
                         .author(currentUser)
+                        .createdAt(new Date())
+                        .isActivated(false)
                         .build()
         );
         questionnaireDto.getChapters().forEach(chapter -> {
@@ -75,12 +77,14 @@ public class QuestionnaireService {
 
     public List<QuestionnaireShortDetailsDto> getAll(String currentUserEmail) throws NotFoundException {
         var currentUser = userService.getUserByEmail(currentUserEmail);
-        return questionnaireRepository.getAllByAuthor(currentUser)
+        return questionnaireRepository.getAllByAuthorOrderByCreatedAtDesc(currentUser)
                 .stream()
                 .map(questionnaire -> QuestionnaireShortDetailsDto
                         .builder()
                         .id(questionnaire.getId())
                         .title(questionnaire.getTitle())
+                        .isActivated(questionnaire.isActivated())
+                        .createdAt(questionnaire.getCreatedAt())
                         .authorEmail(currentUserEmail)
                         .authorDisplayName(currentUser.getDisplayName())
                         .build())
@@ -112,6 +116,8 @@ public class QuestionnaireService {
         return QuestionnaireDetailsDto.builder()
                 .id(questionnaire.getId())
                 .title(questionnaire.getTitle())
+                .isActivated(questionnaire.isActivated())
+                .createdAt(questionnaire.getCreatedAt())
                 .authorDisplayName(currentUser.getDisplayName())
                 .authorEmail(currentUserEmail)
                 .chapters(chapterRepository.getAllByQuestionnaire(questionnaire)
