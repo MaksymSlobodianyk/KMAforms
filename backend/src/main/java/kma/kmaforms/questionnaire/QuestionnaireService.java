@@ -91,6 +91,14 @@ public class QuestionnaireService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteQuestionnaireById(UUID questionnaireId, String currentUserEmail) throws NotFoundException {
+        var currentUser = userService.getUserByEmail(currentUserEmail);
+        var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
+        questionnaireRepository.delete(questionnaire);
+    }
+
+  
+
     public void checkIfAlreadyAnswered(User user, Questionnaire questionnaire)
             throws AlreadyFilledException {
         var question = chapterRepository
@@ -109,7 +117,6 @@ public class QuestionnaireService {
 
     public QuestionnaireDetailsDto getQuestionnaireById(UUID questionnaireId, String currentUserEmail)
             throws NotFoundException, AlreadyFilledException {
-
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
         checkIfAlreadyAnswered(currentUser, questionnaire);
