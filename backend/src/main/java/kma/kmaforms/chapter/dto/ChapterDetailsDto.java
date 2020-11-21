@@ -1,6 +1,7 @@
 package kma.kmaforms.chapter.dto;
 
 import kma.kmaforms.question.dto.QuestionDetailsDto;
+import kma.kmaforms.question.dto.QuestionDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +18,5 @@ public class ChapterDetailsDto {
     private UUID id;
     private String title;
     private String description;
-    private List<QuestionDetailsDto> questions;
+    private List<QuestionDto> questions;
 }

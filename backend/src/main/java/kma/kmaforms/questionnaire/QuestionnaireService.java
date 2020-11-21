@@ -8,6 +8,7 @@ import kma.kmaforms.exceptions.AlreadyFilledException;
 import kma.kmaforms.exceptions.NotFoundException;
 import kma.kmaforms.question.QuestionRepository;
 import kma.kmaforms.question.dto.QuestionDetailsDto;
+import kma.kmaforms.question.dto.QuestionWithAnswerDetailsDto;
 import kma.kmaforms.question.model.Question;
 import kma.kmaforms.questionnaire.dto.QuestionnaireCreationDto;
 import kma.kmaforms.questionnaire.dto.QuestionnaireDetailsDto;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -97,7 +99,6 @@ public class QuestionnaireService {
         questionnaireRepository.delete(questionnaire);
     }
 
-  
 
     public void checkIfAlreadyAnswered(User user, Questionnaire questionnaire)
             throws AlreadyFilledException {
@@ -105,13 +106,15 @@ public class QuestionnaireService {
                 .getAllByQuestionnaire(questionnaire)
                 .stream().findFirst()
                 .flatMap(ch ->
-                    questionRepository.getAllByChapter(ch)
-                            .stream().findFirst()
+                        questionRepository.getAllByChapter(ch)
+                                .stream().findFirst()
                 );
         if (question.isPresent()) {
             var a = answerRepository
                     .getByQuestionAndAuthor(question.get(), user);
-            if (a.isPresent()) { throw new AlreadyFilledException();}
+            if (a.isPresent()) {
+                throw new AlreadyFilledException();
+            }
         }
     }
 
@@ -141,6 +144,41 @@ public class QuestionnaireService {
                                                         .title(question.getTitle())
                                                         .type(question.getType())
                                                         .options(question.getOptions())
+                                                        .build())
+                                                .collect(Collectors.toList()))
+                                        .build()
+                        ).collect(Collectors.toList())
+                )
+                .build();
+    }
+
+    public QuestionnaireDetailsDto getQuestionnaireWithAnswers(UUID questionnaireId, String currentUserEmail, Map<UUID, String> answers)
+            throws NotFoundException, AlreadyFilledException {
+        var currentUser = userService.getUserByEmail(currentUserEmail);
+        var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
+        checkIfAlreadyAnswered(currentUser, questionnaire);
+        return QuestionnaireDetailsDto.builder()
+                .id(questionnaire.getId())
+                .title(questionnaire.getTitle())
+                .isActivated(questionnaire.isActivated())
+                .createdAt(questionnaire.getCreatedAt())
+                .authorDisplayName(currentUser.getDisplayName())
+                .authorEmail(currentUserEmail)
+                .chapters(chapterRepository.getAllByQuestionnaire(questionnaire)
+                        .stream()
+                        .map(chapter ->
+                                ChapterDetailsDto.builder()
+                                        .id(chapter.getId())
+                                        .title(chapter.getTitle())
+                                        .description(chapter.getDescription())
+                                        .questions(questionRepository.getAllByChapter(chapter)
+                                                .stream()
+                                                .map(question -> QuestionWithAnswerDetailsDto.builder()
+                                                        .id(question.getId())
+                                                        .title(question.getTitle())
+                                                        .type(question.getType())
+                                                        .options(question.getOptions())
+                                                        .answer(answers.get(question.getId()))
                                                         .build())
                                                 .collect(Collectors.toList()))
                                         .build()

@@ -1,9 +1,6 @@
 package kma.kmaforms.question.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -11,9 +8,10 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuestionDetailsDto extends QuestionDto {
+public class QuestionWithAnswerDetailsDto extends QuestionDto{
     private UUID id;
     private String title;
     private String type;
     private String options;
+    private String answer;
 }

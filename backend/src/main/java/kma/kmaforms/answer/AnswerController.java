@@ -2,8 +2,10 @@ package kma.kmaforms.answer;
 
 import kma.kmaforms.answer.dto.AnswerCreationDto;
 import kma.kmaforms.auth.AuthService;
+import kma.kmaforms.exceptions.AlreadyFilledException;
 import kma.kmaforms.exceptions.NotFoundException;
 import kma.kmaforms.questionnaire.QuestionnaireRepository;
+import kma.kmaforms.questionnaire.dto.QuestionnaireDetailsDto;
 import kma.kmaforms.user.UserService;
 import kma.kmaforms.user.dto.UserDetailsDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +37,12 @@ public class AnswerController {
     }
 
     @GetMapping(value = "/my")
-    public Map<UUID, String> getCurrentUserAnswer(@RequestParam UUID questionnaireId) {
+    public QuestionnaireDetailsDto getCurrentUserAnswer(@RequestParam UUID questionnaireId) throws NotFoundException, AlreadyFilledException {
         return answerService.getUserQuestionnaireAnswer(questionnaireId, authService.getAuthorizedUser().getEmail());
     }
 
     @GetMapping(value = "/user")
-    public Map<UUID, String> getUserAnswer(@RequestParam UUID questionnaireId, @RequestParam String userEmail) {
+    public QuestionnaireDetailsDto getUserAnswer(@RequestParam UUID questionnaireId, @RequestParam String userEmail) throws NotFoundException, AlreadyFilledException {
         return answerService.getUserQuestionnaireAnswer(questionnaireId, userEmail);
     }
 
