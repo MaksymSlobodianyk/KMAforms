@@ -6,6 +6,8 @@ export class Questionnaire {
   authorDisplayMame ?: string;
   authorEmail ?: string;
   chapters: Array<Chapter>;
+  createdAt ?: Date;
+  activated: boolean;
 
   constructor(init: Partial<Questionnaire>) {
     if (init) {

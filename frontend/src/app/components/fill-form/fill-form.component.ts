@@ -19,8 +19,9 @@ export class FillFormComponent implements OnInit {
   public questionnaireId : string;
   public questionnaire: Questionnaire;
   public form: FormGroup;
-  public isFormDisabled = false;
+  public isFormReviewed = false;
   public fetchDataFunction: Observable<Questionnaire>;
+  public blankViewOnly = false
 
   constructor(
     private fillFormFormService: FillFormFormService,
@@ -31,12 +32,12 @@ export class FillFormComponent implements OnInit {
   ) {
     this.questionnaireId =  this.route.snapshot.params.id;
     this.userEmail = this.route.snapshot.queryParams.user;
-    console.log(this.userEmail)
+    this.blankViewOnly = !!this.route.snapshot.queryParams.vo;
     if (this.userEmail !== undefined) {
-      this.isFormDisabled = true;
+      this.isFormReviewed = true;
       this.fetchDataFunction = this.formApiService.getAnsweredForm(this.questionnaireId, this.userEmail)
     } else {
-      this.fetchDataFunction = this.formApiService.getForm(this.questionnaireId)
+      this.fetchDataFunction = this.formApiService.getForm(this.questionnaireId, this.blankViewOnly)
     }
   }
 
@@ -44,7 +45,7 @@ export class FillFormComponent implements OnInit {
     this.fetchDataFunction.subscribe( data => {
       this.questionnaire = FillFormComponent.processGetData(data);
       this.form = this.fillFormFormService.buildForm(this.questionnaire)
-      if (this.isFormDisabled) {
+      if (this.isFormReviewed || this.blankViewOnly) {
         this.form.disable();
       }
     },

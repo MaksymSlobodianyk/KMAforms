@@ -6,6 +6,7 @@ import kma.kmaforms.exceptions.NotFoundException;
 import kma.kmaforms.questionnaire.dto.QuestionnaireCreationDto;
 import kma.kmaforms.questionnaire.dto.QuestionnaireDetailsDto;
 import kma.kmaforms.questionnaire.dto.QuestionnaireShortDetailsDto;
+import kma.kmaforms.questionnaire.dto.QuestionnaireShortDetailsParticipantsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,11 @@ public class QuestionnaireController {
         questionnaireService.saveQuestionnaire(questionnaireDto, authService.getAuthorizedUser().getEmail());
     }
 
+    @GetMapping(value = "/all/detail")
+    public List<QuestionnaireShortDetailsParticipantsDto> getAllQuestionnairesWParticipants() throws NotFoundException {
+        return questionnaireService.getAllWParticipants(authService.getAuthorizedUser().getEmail());
+    }
+
     @GetMapping(value = "/all")
     public List<QuestionnaireShortDetailsDto> getAllQuestionnaires() throws NotFoundException {
        return questionnaireService.getAll(authService.getAuthorizedUser().getEmail());
@@ -44,9 +50,9 @@ public class QuestionnaireController {
     }
 
     @GetMapping()
-    public QuestionnaireDetailsDto getQuestionnaireById(@RequestParam UUID questionnaireId)
+    public QuestionnaireDetailsDto getQuestionnaireById(@RequestParam UUID questionnaireId, @RequestParam Boolean vo)
             throws NotFoundException, AlreadyFilledException {
-        return questionnaireService.getQuestionnaireById(questionnaireId,authService.getAuthorizedUser().getEmail());
+        return questionnaireService.getQuestionnaireById(questionnaireId,authService.getAuthorizedUser().getEmail(), vo);
     }
 
 }

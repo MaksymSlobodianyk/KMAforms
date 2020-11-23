@@ -43,6 +43,11 @@ const mainPageChildRoutes = [
     path: 'fill/:id',
     component: FillFormComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'review/:id',
+    component: FillFormComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

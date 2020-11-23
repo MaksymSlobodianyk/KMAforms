@@ -84,7 +84,7 @@
 
           <button mat-raised-button
                   color="primary"
-                  [disabled]="chapter.invalid || isLastChapter(i)"
+                  [disabled]="(!blankViewOnly && chapter.invalid) || isLastChapter(i)"
                   matStepperNext
           >
             Next chapter
@@ -105,7 +105,7 @@
     <button mat-raised-button
             color="accent"
             class="m-3"
-            *ngIf="!isFormDisabled"
+            *ngIf="!isFormReviewed && !blankViewOnly"
             (click)="saveForm()"
             [disabled]="form.invalid"
     >

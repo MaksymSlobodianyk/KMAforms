@@ -1,6 +1,7 @@
 package kma.kmaforms.questionnaire;
 
 import kma.kmaforms.answer.AnswerRepository;
+import kma.kmaforms.answer.AnswerService;
 import kma.kmaforms.chapter.ChapterRepository;
 import kma.kmaforms.chapter.dto.ChapterDetailsDto;
 import kma.kmaforms.chapter.model.Chapter;
@@ -13,8 +14,10 @@ import kma.kmaforms.question.model.Question;
 import kma.kmaforms.questionnaire.dto.QuestionnaireCreationDto;
 import kma.kmaforms.questionnaire.dto.QuestionnaireDetailsDto;
 import kma.kmaforms.questionnaire.dto.QuestionnaireShortDetailsDto;
+import kma.kmaforms.questionnaire.dto.QuestionnaireShortDetailsParticipantsDto;
 import kma.kmaforms.questionnaire.model.Questionnaire;
 import kma.kmaforms.user.UserService;
+import kma.kmaforms.user.dto.UserDetailsDto;
 import kma.kmaforms.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -93,6 +96,34 @@ public class QuestionnaireService {
                 .collect(Collectors.toList());
     }
 
+    public List<QuestionnaireShortDetailsParticipantsDto> getAllWParticipants(String currentUserEmail)
+            throws NotFoundException {
+
+        var currentUser = userService.getUserByEmail(currentUserEmail);
+        return questionnaireRepository.getAllByAuthorOrderByCreatedAtDesc(currentUser)
+                .stream()
+                .map( questionnaire -> QuestionnaireShortDetailsParticipantsDto
+                        .builder()
+                        .id(questionnaire.getId())
+                        .title(questionnaire.getTitle())
+                        .isActivated(questionnaire.isActivated())
+                        .createdAt(questionnaire.getCreatedAt())
+                        .authorEmail(currentUserEmail)
+                        .authorDisplayName(currentUser.getDisplayName())
+                        .participants(getUsersWhoRepliedOnQuestionnaire(questionnaire.getId()))
+                        .build()
+                )
+                .collect(Collectors.toList());
+    }
+
+    public List<UserDetailsDto> getUsersWhoRepliedOnQuestionnaire(UUID questionnaireId) {
+        return answerRepository.getUsersWhoRepliedOnQuestionnaire(questionnaireId).stream()
+                .map(user -> UserDetailsDto.builder()
+                        .email(user.getEmail())
+                        .displayName(user.getDisplayName())
+                        .build()).collect(Collectors.toList());
+    }
+
     public void deleteQuestionnaireById(UUID questionnaireId, String currentUserEmail) throws NotFoundException {
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
@@ -118,11 +149,11 @@ public class QuestionnaireService {
         }
     }
 
-    public QuestionnaireDetailsDto getQuestionnaireById(UUID questionnaireId, String currentUserEmail)
+    public QuestionnaireDetailsDto getQuestionnaireById(UUID questionnaireId, String currentUserEmail, Boolean viewOnly)
             throws NotFoundException, AlreadyFilledException {
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
-        checkIfAlreadyAnswered(currentUser, questionnaire);
+        if (!viewOnly) checkIfAlreadyAnswered(currentUser, questionnaire);
         return QuestionnaireDetailsDto.builder()
                 .id(questionnaire.getId())
                 .title(questionnaire.getTitle())

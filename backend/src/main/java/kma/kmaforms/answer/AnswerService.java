@@ -62,10 +62,6 @@ public class AnswerService {
     }
 
     public List<UserDetailsDto> getUsersWhoRepliedOnQuestionnaire(UUID questionnaireId) {
-        return answerRepository.getUsersWhoRepliedOnQuestionnaire(questionnaireId).stream()
-                .map(user -> UserDetailsDto.builder()
-                        .email(user.getEmail())
-                        .displayName(user.getDisplayName())
-                        .build()).collect(Collectors.toList());
+        return questionnaireService.getUsersWhoRepliedOnQuestionnaire(questionnaireId);
     }
 }

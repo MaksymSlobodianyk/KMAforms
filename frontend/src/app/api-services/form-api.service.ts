@@ -4,6 +4,7 @@ import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {Questionnaire} from "../shared/models/questionnaire/questionnaire.model";
 import {Answer} from "../shared/models/questionnaire/answer.model";
+import {QuestionnaireWParticipants} from "../shared/models/questionnaire/questionnaireWParticipants.model";
 
 @Injectable({
   providedIn: 'root'
@@ -19,18 +20,23 @@ export class FormApiService {
     return this.httpClient.post<any>(`${environment.baseURL}/api/questionnaire`, questionnaireDto);
   }
 
-  public getForm(id: string) : Observable<Questionnaire> {
-    return this.httpClient.get<Questionnaire>(`${environment.baseURL}/api/questionnaire?questionnaireId=${id}`);
+  public getForm(id: string, vo:boolean = false) : Observable<Questionnaire> {
+    return this.httpClient
+      .get<Questionnaire>(`${environment.baseURL}/api/questionnaire?questionnaireId=${id}&vo=${vo}`);
   }
 
   public saveAnswers(answers: Array<Answer>): Observable<any> {
     return this.httpClient.post<any>(`${environment.baseURL}/api/answer`, answers);
   }
-  
+
   public getAnsweredForm(questionnaireId: string, email: string): Observable<Questionnaire> {
     return this.httpClient
       .get<Questionnaire>(
         `${environment.baseURL}/api/answer/user?questionnaireId=${questionnaireId}&userEmail=${email}`
       );
+  }
+
+  public getMyQuestionnairesWParticipants(): Observable<Array<QuestionnaireWParticipants>> {
+    return this.httpClient.get<Array<QuestionnaireWParticipants>>(`${environment.baseURL}/api/questionnaire/all/detail`)
   }
 }
