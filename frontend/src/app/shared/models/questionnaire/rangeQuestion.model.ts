@@ -5,6 +5,7 @@ export class RangeQuestion {
   min: number;
   max: number;
   options ?: string;
+  answer ?: string;
 
   constructor(init: Partial<RangeQuestion>) {
     if (init) {

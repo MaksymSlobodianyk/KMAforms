@@ -26,12 +26,12 @@ export class FillFormFormService {
 
       chapter.questions.forEach(question => {
         if (question.type === 'oneOf') {
-          chapterFA.push(new FormControl(null, [Validators.required]))
+          chapterFA.push(new FormControl(question.answer || null, [Validators.required]))
         } else if (question.type === 'open') {
-          chapterFA.push(new FormControl(null, [Validators.required,
+          chapterFA.push(new FormControl(question.answer || null, [Validators.required,
             Validators.minLength(question.minLength), Validators.maxLength(question.maxLength)]))
         } else if (question.type === 'range') {
-          chapterFA.push(new FormControl(question.min, [Validators.required,
+          chapterFA.push(new FormControl(question.answer || question.min, [Validators.required,
             Validators.min(question.min), Validators.max(question.max)]))
         }
       })

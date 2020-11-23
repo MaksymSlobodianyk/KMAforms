@@ -4,6 +4,7 @@ export class OneOfQuestion {
   type: 'oneOf' = 'oneOf';
   answers: Array<string>;
   options ?: string;
+  answer ?: string;
 
   constructor(init: Partial<OneOfQuestion>) {
     if (init) {

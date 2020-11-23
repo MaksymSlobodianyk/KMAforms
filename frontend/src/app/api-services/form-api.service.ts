@@ -26,4 +26,11 @@ export class FormApiService {
   public saveAnswers(answers: Array<Answer>): Observable<any> {
     return this.httpClient.post<any>(`${environment.baseURL}/api/answer`, answers);
   }
+  
+  public getAnsweredForm(questionnaireId: string, email: string): Observable<Questionnaire> {
+    return this.httpClient
+      .get<Questionnaire>(
+        `${environment.baseURL}/api/answer/user?questionnaireId=${questionnaireId}&userEmail=${email}`
+      );
+  }
 }

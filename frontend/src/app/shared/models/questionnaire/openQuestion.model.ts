@@ -5,6 +5,7 @@ export class OpenQuestion {
   minLength: number;
   maxLength: number;
   options ?: string;
+  answer ?: string;
 
   constructor(init: Partial<OpenQuestion>) {
     if (init) {

@@ -6,6 +6,7 @@ import {Question} from "../../shared/models/questionnaire/chapter.model";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormApiService} from "../../api-services/form-api.service";
 import {Toaster} from "ngx-toast-notifications";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-fill-form',
@@ -14,10 +15,12 @@ import {Toaster} from "ngx-toast-notifications";
 })
 export class FillFormComponent implements OnInit {
 
+  public userEmail: string;
   public questionnaireId : string;
   public questionnaire: Questionnaire;
   public form: FormGroup;
-
+  public isFormDisabled = false;
+  public fetchDataFunction: Observable<Questionnaire>;
 
   constructor(
     private fillFormFormService: FillFormFormService,
@@ -27,12 +30,23 @@ export class FillFormComponent implements OnInit {
     private formApiService: FormApiService
   ) {
     this.questionnaireId =  this.route.snapshot.params.id;
+    this.userEmail = this.route.snapshot.queryParams.user;
+    console.log(this.userEmail)
+    if (this.userEmail !== undefined) {
+      this.isFormDisabled = true;
+      this.fetchDataFunction = this.formApiService.getAnsweredForm(this.questionnaireId, this.userEmail)
+    } else {
+      this.fetchDataFunction = this.formApiService.getForm(this.questionnaireId)
+    }
   }
 
   ngOnInit(): void {
-    this.formApiService.getForm(this.questionnaireId).subscribe( data => {
+    this.fetchDataFunction.subscribe( data => {
       this.questionnaire = FillFormComponent.processGetData(data);
       this.form = this.fillFormFormService.buildForm(this.questionnaire)
+      if (this.isFormDisabled) {
+        this.form.disable();
+      }
     },
     error =>{
       this.toaster.open({
@@ -46,7 +60,7 @@ export class FillFormComponent implements OnInit {
 
   private static handleErrorMessage(errorStatus: number) : string {
     if (errorStatus === 409) {
-      return '😢   Упс... Ви вже пройшли цю форму форму'
+      return '😢   Упс... Ви вже пройшли цю форму'
     } else {
       return '😢   Упс... Нам не вдалося загрузити форму'
     }
@@ -62,6 +76,10 @@ export class FillFormComponent implements OnInit {
 
   public question(chapterIdx: number, questionIdx: number) : Question {
     return this.questionnaire.chapters[chapterIdx].questions[questionIdx]
+  }
+
+  public isLastChapter(chapterIdx: number) : boolean {
+    return this.chapters.controls.length === chapterIdx +1
   }
 
   public saveForm() {

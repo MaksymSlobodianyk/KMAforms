@@ -156,7 +156,6 @@ public class QuestionnaireService {
             throws NotFoundException, AlreadyFilledException {
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
-        checkIfAlreadyAnswered(currentUser, questionnaire);
         return QuestionnaireDetailsDto.builder()
                 .id(questionnaire.getId())
                 .title(questionnaire.getTitle())
