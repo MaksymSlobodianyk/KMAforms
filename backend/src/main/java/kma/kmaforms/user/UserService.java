@@ -27,6 +27,10 @@ public class UserService {
         return registeredUser.getRole();
     }
 
+    public boolean isAdmin(AuthenticatedUser user) throws NotFoundException {
+        return getRole(user).toUpperCase().equals("ADMIN");
+    }
+
     public User getUserByEmail(String email) throws NotFoundException {
         return userRepository.findById(email).orElseThrow(NotFoundException::new);
     }

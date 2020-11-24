@@ -10,11 +10,12 @@ import {RolesManagementComponent} from './components/roles-management/roles-mana
 import {PassedFormsListComponent} from './components/passed-forms-list/passed-forms-list.component';
 import {SuggestedFormsListComponent} from './components/suggested-forms-list/suggested-forms-list.component';
 import {FillFormComponent} from './components/fill-form/fill-form.component';
+import {AuthAdminGuard} from "./guards/auth-admin.guard";
 
 const mainPageChildRoutes = [
   {
     path: '',
-    component: FormsListComponent,
+    component: SuggestedFormsListComponent,
     pathMatch: 'full',
     canActivate: [AuthGuard]
   },
@@ -27,17 +28,17 @@ const mainPageChildRoutes = [
   {
     path: 'roles-management',
     component: RolesManagementComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthAdminGuard]
   },
   {
-    path: 'temp',
-    component: SuggestedFormsListComponent,
-    canActivate: [AuthGuard]
+    path: 'my-forms',
+    component: FormsListComponent,
+    canActivate: [AuthAdminGuard]
   },
   {
     path: 'passed',
     component: PassedFormsListComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthAdminGuard]
   },
   {
     path: 'fill/:id',
@@ -47,7 +48,7 @@ const mainPageChildRoutes = [
   {
     path: 'review/:id',
     component: FillFormComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthAdminGuard]
   }
 ];
 

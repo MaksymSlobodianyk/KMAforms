@@ -1,1 +1,8 @@
 <button style="color: white; background: cornflowerblue; border-radius: 10px; border: none; padding: 5px; cursor: pointer" (click)="signIn()" >Увійти через office365</button>
+
+<div
+  class="container-fluid d-flex justify-content-center m-5"
+  *ngIf="startLoading"
+>
+  <mat-spinner color="accent"></mat-spinner>
+</div>

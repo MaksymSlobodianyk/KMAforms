@@ -51,9 +51,11 @@ export class PassedFormsListComponent implements OnInit {
     const dialogRef = this.dialog.open(QuestionnaireParticipantsDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-      email =>
-        this.router.navigate(['/me', 'fill', questionnaire.id], {queryParams:{user: email}})
-    );
+      email => {
+        if (email) {
+          this.router.navigate(['/me', 'fill', questionnaire.id], {queryParams: {user: email}})
+        }
+      });
   }
 
   private static formatDate(date: Date): string {

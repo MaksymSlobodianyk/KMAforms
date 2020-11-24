@@ -8,13 +8,16 @@ import {AuthService} from '../../auth/auth.service';
 })
 export class LandingPageComponent implements OnInit {
 
+  public startLoading = false;
+
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
   }
 
   async signIn(): Promise<void>{
-      await this.authService.signIn();
+    this.startLoading = true;
+    await this.authService.signIn();
   }
 
 }

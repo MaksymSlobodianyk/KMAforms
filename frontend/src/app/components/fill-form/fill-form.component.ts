@@ -30,18 +30,27 @@ export class FillFormComponent implements OnInit {
     private toaster: Toaster,
     private formApiService: FormApiService
   ) {
+    const isFilling = this.route.snapshot.url[0].path === 'fill';
     this.questionnaireId =  this.route.snapshot.params.id;
     this.userEmail = this.route.snapshot.queryParams.user;
     this.blankViewOnly = !!this.route.snapshot.queryParams.vo;
-    if (this.userEmail !== undefined) {
+    if (isFilling) {
+      this.fetchDataFunction = this.formApiService.getForm(this.questionnaireId, this.blankViewOnly)
+    }else if (this.userEmail !== undefined) {
       this.isFormReviewed = true;
       this.fetchDataFunction = this.formApiService.getAnsweredForm(this.questionnaireId, this.userEmail)
     } else {
-      this.fetchDataFunction = this.formApiService.getForm(this.questionnaireId, this.blankViewOnly)
+      this.toaster.open({
+        caption: '😢   Упс... Неправильно зіставлено URL',
+        duration: 4000,
+        type: 'warning'
+      });
+      this.router.navigate(['/me'])
     }
   }
 
   ngOnInit(): void {
+    if (!this.fetchDataFunction) return
     this.fetchDataFunction.subscribe( data => {
       this.questionnaire = FillFormComponent.processGetData(data);
       this.form = this.fillFormFormService.buildForm(this.questionnaire)

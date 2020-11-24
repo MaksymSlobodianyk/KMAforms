@@ -8,6 +8,7 @@ import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 import {Toaster} from 'ngx-toast-notifications';
 import {Router} from '@angular/router';
 import {AuthApiService} from '../api-services/auth-api.service';
+import {FormApiService} from "../api-services/form-api.service";
 
 @Injectable({
   providedIn: 'root'
@@ -20,14 +21,19 @@ export class AuthService {
 
   constructor(
     private msalService: MsalService,
-    private  toaster: Toaster,
+    private toaster: Toaster,
     private router: Router,
     private authApiService: AuthApiService,
+    private formApiService: FormApiService
   ) {
     this.authenticated = this.msalService.getAccount() != null;
     this.getUser().then((user) => {
       this.user = user;
     });
+  }
+
+  public get isAdmin(): boolean {
+    return localStorage.getItem('isAdmin') === '1'
   }
 
   async signIn(): Promise<void> {
@@ -51,9 +57,19 @@ export class AuthService {
       });
 
     if (result) {
-      this.router.navigateByUrl('/me');
       this.authenticated = true;
       this.user = await this.getUser();
+      this.formApiService.checkIfAdmin().subscribe(result => {
+        localStorage.setItem('isAdmin', result? '1':'0');
+        this.router.navigateByUrl('/me');
+      }, error => {
+        this.toaster.open({
+          text: 'Ми не змогли дізнатися про Вашу роль',
+          caption: '😢   Упс...',
+          duration: 4000,
+          type: 'warning'
+        });
+      })
     }
   }
 

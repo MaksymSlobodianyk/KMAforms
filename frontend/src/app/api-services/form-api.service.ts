@@ -39,4 +39,8 @@ export class FormApiService {
   public getMyQuestionnairesWParticipants(): Observable<Array<QuestionnaireWParticipants>> {
     return this.httpClient.get<Array<QuestionnaireWParticipants>>(`${environment.baseURL}/api/questionnaire/all/detail`)
   }
+
+  public checkIfAdmin(): Observable<boolean> {
+    return this.httpClient.get<boolean>(`${environment.baseURL}/api/user/admin`);
+  }
 }
