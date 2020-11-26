@@ -58,9 +58,9 @@ public class AnswerController {
     }
 
     @GetMapping(value = "/statistic")
-    public QuestionnaireDetailsDto getQuestionnaireStatistic(@RequestParam UUID questionnaireId, @RequestParam String userEmail) {
+    public QuestionnaireDetailsDto getQuestionnaireStatistic(@RequestParam UUID questionnaireId) {
         try {
-            return answerService.getStatisticForQuestionnaire(questionnaireId, userEmail);
+            return answerService.getStatisticForQuestionnaire(questionnaireId,  authService.getAuthorizedUser().getEmail());
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
         }
