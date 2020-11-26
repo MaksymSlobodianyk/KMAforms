@@ -57,6 +57,15 @@ public class AnswerController {
         }
     }
 
+    @GetMapping(value = "/statistic")
+    public QuestionnaireDetailsDto getQuestionnaireStatistic(@RequestParam UUID questionnaireId, @RequestParam String userEmail) {
+        try {
+            return answerService.getStatisticForQuestionnaire(questionnaireId, userEmail);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }
+    }
+
     @GetMapping(value = "/users")
     public List<UserDetailsDto> asa(@RequestParam UUID questionnaireId) {
         return answerService.getUsersWhoRepliedOnQuestionnaire(questionnaireId);

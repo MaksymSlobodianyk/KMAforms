@@ -22,6 +22,8 @@ public interface AnswerRepository extends JpaRepository<Answer, String> {
             "WHERE questionnaire.id = :questionnaireId AND a.author.email = :email")
     List<Answer> getByQuestionnaireAndAuthor(@Param("questionnaireId") UUID questionnaireId, @Param("email") String email);
 
+    List<Answer> getAllByQuestion(@Param("questionId") Question question);
+
     @Query("SELECT distinct a.author from Answer a INNER JOIN Question q ON q =a.question " +
             "INNER JOIN Chapter c ON c = q.chapter " +
                     "INNER JOIN Questionnaire questionnaire ON questionnaire = c.questionnaire " +
