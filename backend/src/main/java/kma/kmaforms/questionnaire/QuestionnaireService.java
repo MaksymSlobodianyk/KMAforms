@@ -7,6 +7,7 @@ import kma.kmaforms.chapter.dto.ChapterDetailsDto;
 import kma.kmaforms.chapter.model.Chapter;
 import kma.kmaforms.exceptions.AlreadyFilledException;
 import kma.kmaforms.exceptions.NotFoundException;
+import kma.kmaforms.exceptions.NotFoundUserException;
 import kma.kmaforms.question.QuestionRepository;
 import kma.kmaforms.question.dto.QuestionDetailsDto;
 import kma.kmaforms.question.dto.QuestionWithAnswerDetailsDto;
@@ -48,7 +49,7 @@ public class QuestionnaireService {
         this.answerRepository = answerRepository;
     }
 
-    public void saveQuestionnaire(QuestionnaireCreationDto questionnaireDto, String currentUserEmail) throws NotFoundException {
+    public void saveQuestionnaire(QuestionnaireCreationDto questionnaireDto, String currentUserEmail) {
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var savedQuestionnaire = questionnaireRepository.save(
                 Questionnaire.builder()
@@ -80,10 +81,11 @@ public class QuestionnaireService {
         });
     }
 
-    public List<QuestionnaireShortDetailsDto> getAll(String currentUserEmail) throws NotFoundException {
+    public List<QuestionnaireShortDetailsDto> getAll(String currentUserEmail) {
         var currentUser = userService.getUserByEmail(currentUserEmail);
         return questionnaireRepository.getAllByAuthorOrderByCreatedAtDesc(currentUser)
                 .stream()
+                .filter(Questionnaire::isActivated)
                 .map(questionnaire -> QuestionnaireShortDetailsDto
                         .builder()
                         .id(questionnaire.getId())
@@ -96,8 +98,7 @@ public class QuestionnaireService {
                 .collect(Collectors.toList());
     }
 
-    public List<QuestionnaireShortDetailsParticipantsDto> getAllWParticipants(String currentUserEmail)
-            throws NotFoundException {
+    public List<QuestionnaireShortDetailsParticipantsDto> getAllWParticipants(String currentUserEmail) {
 
         var currentUser = userService.getUserByEmail(currentUserEmail);
         return questionnaireRepository.getAllByAuthorOrderByCreatedAtDesc(currentUser)
@@ -124,7 +125,8 @@ public class QuestionnaireService {
                         .build()).collect(Collectors.toList());
     }
 
-    public void deleteQuestionnaireById(UUID questionnaireId, String currentUserEmail) throws NotFoundException {
+    public void deleteQuestionnaireById(UUID questionnaireId, String currentUserEmail)
+            throws NotFoundException{
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
         questionnaireRepository.delete(questionnaire);
@@ -149,8 +151,16 @@ public class QuestionnaireService {
         }
     }
 
+    public void enableQuestionnaire(UUID questionnaireId, String currentUserEmail, Boolean enabling)
+            throws NotFoundException {
+        var currentUser = userService.getUserByEmail(currentUserEmail);
+        var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
+        questionnaire.setActivated(enabling);
+        questionnaireRepository.save(questionnaire);
+    }
+
     public QuestionnaireDetailsDto getQuestionnaireById(UUID questionnaireId, String currentUserEmail, Boolean viewOnly)
-            throws NotFoundException, AlreadyFilledException {
+            throws NotFoundException, AlreadyFilledException{
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
         if (!viewOnly) checkIfAlreadyAnswered(currentUser, questionnaire);
@@ -184,7 +194,7 @@ public class QuestionnaireService {
     }
 
     public QuestionnaireDetailsDto getQuestionnaireWithAnswers(UUID questionnaireId, String currentUserEmail, Map<UUID, String> answers)
-            throws NotFoundException, AlreadyFilledException {
+            throws NotFoundException{
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
         return QuestionnaireDetailsDto.builder()

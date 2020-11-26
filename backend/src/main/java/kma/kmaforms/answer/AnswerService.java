@@ -4,6 +4,7 @@ import kma.kmaforms.answer.dto.AnswerCreationDto;
 import kma.kmaforms.answer.model.Answer;
 import kma.kmaforms.exceptions.AlreadyFilledException;
 import kma.kmaforms.exceptions.NotFoundException;
+import kma.kmaforms.exceptions.NotFoundUserException;
 import kma.kmaforms.question.QuestionRepository;
 import kma.kmaforms.questionnaire.QuestionnaireRepository;
 import kma.kmaforms.questionnaire.QuestionnaireService;
@@ -41,7 +42,7 @@ public class AnswerService {
         this.questionnaireService = questionnaireService;
     }
 
-    public void saveAnswers(List<AnswerCreationDto> answers, String currentUserEmail) throws NotFoundException {
+    public void saveAnswers(List<AnswerCreationDto> answers, String currentUserEmail){
         var currentUser = userService.getUserByEmail(currentUserEmail);
         answers.forEach(answer -> {
                     var question = questionRepository.getById(answer.getQuestionId());
@@ -54,7 +55,8 @@ public class AnswerService {
         );
     }
 
-    public QuestionnaireDetailsDto getUserQuestionnaireAnswer(UUID questionnaireId, String userEmail) throws NotFoundException, AlreadyFilledException {
+    public QuestionnaireDetailsDto getUserQuestionnaireAnswer(UUID questionnaireId, String userEmail)
+            throws NotFoundException{
         Map<UUID, String> answers = new HashMap<>();
         answerRepository.getByQuestionnaireAndAuthor(questionnaireId, userEmail)
                 .forEach(answer -> answers.put(answer.getQuestion().getId(), answer.getAnswer()));

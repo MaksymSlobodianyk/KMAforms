@@ -7,6 +7,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {FormApiService} from "../../api-services/form-api.service";
 import {Toaster} from "ngx-toast-notifications";
 import {Observable} from "rxjs";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-fill-form',
@@ -60,20 +61,12 @@ export class FillFormComponent implements OnInit {
     },
     error =>{
       this.toaster.open({
-        caption: FillFormComponent.handleErrorMessage(error.status),
+        caption: `😢   Упс... ${error.error.message}`,
         duration: 4000,
         type: 'warning'
       });
       this.router.navigate(['/me'])
     })
-  }
-
-  private static handleErrorMessage(errorStatus: number) : string {
-    if (errorStatus === 409) {
-      return '😢   Упс... Ви вже пройшли цю форму'
-    } else {
-      return '😢   Упс... Нам не вдалося загрузити форму'
-    }
   }
 
   get chapters() {
