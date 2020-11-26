@@ -53,7 +53,7 @@ export class PassedFormsListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       email => {
         if (email) {
-          this.router.navigate(['/me', 'fill', questionnaire.id], {queryParams: {user: email}})
+          this.router.navigate(['/me', 'review', questionnaire.id], {queryParams: {user: email}})
         }
       });
   }
