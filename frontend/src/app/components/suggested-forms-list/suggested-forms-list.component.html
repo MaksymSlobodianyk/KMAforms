@@ -1,1 +1,36 @@
-<p>sujested-forms-list works!</p>
+<div
+  class="flex-wrapper-card p-3"
+  *ngIf="questionnaires"
+>
+  <div class="q-card " *ngFor="let quest of questionnaires">
+    <mat-card >
+      <mat-card-header>
+        <mat-card-title>{{quest.title}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-div">
+          <span class="m-2">Created at: {{showDate(quest)}}</span>
+          <span class="m-2">Created by: {{quest.authorDisplayName}}</span>
+        </div>
+
+      </mat-card-content>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          class="mb-4"
+          (click)="goFillQ(quest.id)"
+        >
+          Fill the questionnaire
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+<div
+  class="container-fluid d-flex justify-content-center m-5"
+  *ngIf="!questionnaires"
+>
+  <mat-spinner color="accent"></mat-spinner>
+</div>

@@ -47,6 +47,11 @@ export class FormApiService {
       .get<Array<Questionnaire>>(`${environment.baseURL}/api/questionnaire/all`)
   }
 
+  public getAllActiveQuestionnaires(): Observable<Array<Questionnaire>> {
+    return this.httpClient
+      .get<Array<Questionnaire>>(`${environment.baseURL}/api/questionnaire/all-t`)
+  }
+
   public enableQuestionnaire(questionnaireId: string): Observable<any> {
     return this.httpClient.post<any>(`${environment.baseURL}/api/questionnaire/enable?questionnaireId=${questionnaireId}`, {})
   }

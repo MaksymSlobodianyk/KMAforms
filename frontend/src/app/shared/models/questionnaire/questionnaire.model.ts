@@ -3,7 +3,7 @@ import {Chapter} from "./chapter.model";
 export class Questionnaire {
   id ?: string;
   title: string;
-  authorDisplayMame ?: string;
+  authorDisplayName ?: string;
   authorEmail ?: string;
   chapters: Array<Chapter>;
   createdAt ?: Date;

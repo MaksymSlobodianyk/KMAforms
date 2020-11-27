@@ -66,6 +66,11 @@ public class QuestionnaireController {
        return questionnaireService.getAll(authService.getAuthorizedUser().getEmail());
     }
 
+    @GetMapping(value = "/all-t")
+    public List<QuestionnaireShortDetailsDto> getAllQuestionnairesTotal() {
+        return questionnaireService.getAllQuestionnaires();
+    }
+
     @DeleteMapping()
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteQuestionnaireById(@RequestParam UUID questionnaireId){

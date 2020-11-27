@@ -1,9 +1,9 @@
 <div
-  class="flex flex-center flex-wrap p-3"
+  class="flex-wrapper-card p-3"
   *ngIf="questionnaires"
 >
-  <div *ngFor="let quest of questionnaires">
-    <mat-card class="q-card">
+  <div class="q-card" *ngFor="let quest of questionnaires">
+    <mat-card>
       <mat-card-header>
         <mat-card-title>{{quest.title}}</mat-card-title>
       </mat-card-header>

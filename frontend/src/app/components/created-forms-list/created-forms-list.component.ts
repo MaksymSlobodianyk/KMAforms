@@ -97,4 +97,8 @@ export class CreatedFormsListComponent implements OnInit {
       })
     })
   }
+
+  public goViewStat(id: string) {
+
+  }
 }

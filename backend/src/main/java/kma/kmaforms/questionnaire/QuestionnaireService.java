@@ -97,6 +97,22 @@ public class QuestionnaireService {
                 .collect(Collectors.toList());
     }
 
+    public List<QuestionnaireShortDetailsDto> getAllQuestionnaires() {
+        return questionnaireRepository.getAllQuestionnaires()
+                .stream()
+                .filter(Questionnaire::isActivated)
+                .map(questionnaire -> QuestionnaireShortDetailsDto
+                        .builder()
+                        .id(questionnaire.getId())
+                        .title(questionnaire.getTitle())
+                        .isActivated(questionnaire.isActivated())
+                        .createdAt(questionnaire.getCreatedAt())
+                        .authorEmail(questionnaire.getAuthor().getEmail())
+                        .authorDisplayName(questionnaire.getAuthor().getDisplayName())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
     public List<QuestionnaireShortDetailsParticipantsDto> getAllWParticipants(String currentUserEmail) {
 
         var currentUser = userService.getUserByEmail(currentUserEmail);
