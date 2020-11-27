@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -27,10 +29,12 @@ public class Answer {
     )
     UUID id;
     String answer;
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "question_id", nullable = false)
     Question question;
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "author_email", nullable = false)
     User author;
 }

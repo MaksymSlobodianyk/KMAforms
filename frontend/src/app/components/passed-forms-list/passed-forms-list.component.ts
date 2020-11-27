@@ -5,6 +5,7 @@ import {Toaster} from "ngx-toast-notifications";
 import {Router} from "@angular/router";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {QuestionnaireParticipantsDialogComponent} from "../../shared/components/questionnaire-participants-dialog/questionnaire-participants-dialog.component";
+import {formatDate} from "../../shared/helpers/format-functions";
 
 @Component({
   selector: 'app-passed-forms-list',
@@ -38,7 +39,7 @@ export class PassedFormsListComponent implements OnInit {
   }
 
   public showDate(questionnaire: QuestionnaireWParticipants): string {
-    return PassedFormsListComponent.formatDate(new Date(questionnaire.createdAt));
+    return formatDate(new Date(questionnaire.createdAt));
   }
 
   public openDialog(questionnaire: QuestionnaireWParticipants) {
@@ -58,18 +59,6 @@ export class PassedFormsListComponent implements OnInit {
       });
   }
 
-  private static formatDate(date: Date): string {
-    var d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
 
-    if (month.length < 2)
-      month = '0' + month;
-    if (day.length < 2)
-      day = '0' + day;
-
-    return [day, month, year].join('/');
-  }
 
 }

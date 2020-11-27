@@ -4,7 +4,6 @@ import kma.kmaforms.auth.AuthService;
 import kma.kmaforms.exceptions.AlreadyFilledException;
 import kma.kmaforms.exceptions.ErrorMessages;
 import kma.kmaforms.exceptions.NotFoundException;
-import kma.kmaforms.exceptions.NotFoundUserException;
 import kma.kmaforms.questionnaire.dto.QuestionnaireCreationDto;
 import kma.kmaforms.questionnaire.dto.QuestionnaireDetailsDto;
 import kma.kmaforms.questionnaire.dto.QuestionnaireShortDetailsDto;

@@ -13,6 +13,9 @@ import {MatCardModule} from "@angular/material/card";
 import {MatDialogModule} from "@angular/material/dialog";
 import { QuestionnaireParticipantsDialogComponent } from './components/questionnaire-participants-dialog/questionnaire-participants-dialog.component';
 import {MatSelectModule} from "@angular/material/select";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {MatListModule} from "@angular/material/list";
+import {MatDividerModule} from "@angular/material/divider";
 
 @NgModule({
   declarations: [QuestionnaireParticipantsDialogComponent],
@@ -29,7 +32,10 @@ import {MatSelectModule} from "@angular/material/select";
     MatRadioModule,
     MatCardModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatListModule,
+    MatDividerModule
   ],
   exports: [
     MatStepperModule,
@@ -43,7 +49,10 @@ import {MatSelectModule} from "@angular/material/select";
     MatRadioModule,
     MatCardModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatListModule,
+    MatDividerModule
   ],
   entryComponents: [QuestionnaireParticipantsDialogComponent]
 })

@@ -29,7 +29,8 @@ public class UserService {
 
     public User registerUserIfNotExist(AuthenticatedUser user) {
         var registeredUser = userRepository.findById(user.getEmail());
-        return registeredUser.orElseGet(() -> userRepository.save(new User(user.getEmail(), user.getDisplayName(), "User")));
+        var role = userRepository.count() == 0 ? "admin": "user";
+        return registeredUser.orElseGet(() -> userRepository.save(new User(user.getEmail(), user.getDisplayName(), role)));
     }
 
     public String getRole(AuthenticatedUser user) throws NotFoundException {

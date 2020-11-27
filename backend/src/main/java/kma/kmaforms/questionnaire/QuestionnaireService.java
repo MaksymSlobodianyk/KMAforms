@@ -56,7 +56,7 @@ public class QuestionnaireService {
                         .title(questionnaireDto.getTitle())
                         .author(currentUser)
                         .createdAt(new Date())
-                        .isActivated(false)
+                        .isActivated(true)
                         .build()
         );
         questionnaireDto.getChapters().forEach(chapter -> {
@@ -85,7 +85,6 @@ public class QuestionnaireService {
         var currentUser = userService.getUserByEmail(currentUserEmail);
         return questionnaireRepository.getAllByAuthorOrderByCreatedAtDesc(currentUser)
                 .stream()
-                .filter(Questionnaire::isActivated)
                 .map(questionnaire -> QuestionnaireShortDetailsDto
                         .builder()
                         .id(questionnaire.getId())

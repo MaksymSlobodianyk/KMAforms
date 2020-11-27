@@ -35,7 +35,7 @@ export class FillFormComponent implements OnInit {
     this.questionnaireId =  this.route.snapshot.params.id;
     this.userEmail = this.route.snapshot.queryParams.user;
     this.blankViewOnly = !!this.route.snapshot.queryParams.vo;
-    if (isFilling) {
+    if (isFilling || (!this.userEmail && !isFilling)) {
       this.fetchDataFunction = this.formApiService.getForm(this.questionnaireId, this.blankViewOnly)
     }else if (this.userEmail !== undefined) {
       this.isFormReviewed = true;
