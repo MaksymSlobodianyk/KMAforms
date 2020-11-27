@@ -49,7 +49,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
     PassedFormsListComponent,
     CreatedFormsListComponent,
     SuggestedFormsListComponent,
-    FillFormComponent
+    FillFormComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {FormApiService} from "../../api-services/form-api.service";
-import {Toaster} from "ngx-toast-notifications";
-import {Router} from "@angular/router";
-import {Questionnaire} from "../../shared/models/questionnaire/questionnaire.model";
-import {formatDate} from "../../shared/helpers/format-functions";
+import {FormApiService} from '../../api-services/form-api.service';
+import {Toaster} from 'ngx-toast-notifications';
+import {Router} from '@angular/router';
+import {Questionnaire} from '../../shared/models/questionnaire/questionnaire.model';
+import {formatDate} from '../../shared/helpers/format-functions';
 
 @Component({
   selector: 'app-sujested-forms-list',
@@ -12,7 +12,7 @@ import {formatDate} from "../../shared/helpers/format-functions";
 })
 export class SuggestedFormsListComponent implements OnInit {
 
-  public questionnaires: Array<Questionnaire>
+  public questionnaires: Array<Questionnaire>;
 
   constructor(
     private formApiService: FormApiService,
@@ -29,16 +29,16 @@ export class SuggestedFormsListComponent implements OnInit {
         duration: 4000,
         type: 'warning'
       });
-      this.router.navigate(['/me'])
-    })
+      this.router.navigate(['/me']);
+    });
   }
 
 
-  public showDate(questionnaire:Questionnaire) {
+  public showDate(questionnaire: Questionnaire) {
     return formatDate(new Date(questionnaire.createdAt));
   }
 
   public goFillQ(id: string) {
-    this.router.navigate(['me', 'fill', id])
+    this.router.navigate(['me', 'fill', id]);
   }
 }
