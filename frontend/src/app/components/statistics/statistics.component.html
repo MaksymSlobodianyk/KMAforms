@@ -1,0 +1,64 @@
+<div
+  class="container-fluid"
+  *ngIf="questionnaire"
+>
+  <h1>{{questionnaire.title}}</h1>
+  <div *ngIf="questionnaire&&questionnaire.chapters[0].questions[0].answers.length!==0">
+    <mat-horizontal-stepper [linear]="true" #stepper>
+      <div
+        *ngFor="let chapter of questionnaire.chapters; let i = index;"
+      >
+        <mat-step>
+
+
+          <ng-template matStepLabel>{{questionnaire.chapters[i].title}}</ng-template>
+          <h2>{{questionnaire.chapters[i].title}}</h2>
+          <h5>{{questionnaire.chapters[i].description}}</h5>
+          <div class="col-styling ml-3">
+            <h5>Questions</h5>
+            <div class="ml-3"
+                 *ngFor="let question of questionnaire.chapters[i].questions;"
+            >
+              <h5>{{question.title}}</h5>
+              <div>
+                <div
+                  class="ml-3"
+                  *ngIf="question.type === 'oneOf'||question.type === 'range'"
+                >
+                  <ngx-charts-advanced-pie-chart
+                    [view]="[700, 400]"
+                    [results]="question.answers"
+                  >
+                  </ngx-charts-advanced-pie-chart>
+                </div>
+
+                <div
+                  class="ml-3"
+                  style="max-height: 400px; overflow: auto"
+                  *ngIf="question.type === 'open'"
+                >
+                  <mat-card *ngFor="let answer of question.answers;let j = index;">
+                    <mat-card-header><h6>{{j + 1}}. {{answer.name}}</h6></mat-card-header>
+                  </mat-card>
+                </div>
+
+                <hr class="hr-50"/>
+              </div>
+            </div>
+          </div>
+        </mat-step>
+      </div>
+    </mat-horizontal-stepper>
+  </div>
+</div>
+
+
+<div *ngIf="questionnaire&&questionnaire.chapters[0].questions[0].answers.length===0">
+  На ваш опитник ще не дали жодної відповіді😢
+</div>
+<div
+  class="container-fluid d-flex justify-content-center m-5"
+  *ngIf="!questionnaire"
+>
+  <mat-spinner color="accent"></mat-spinner>
+</div>

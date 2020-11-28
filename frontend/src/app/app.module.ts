@@ -26,6 +26,7 @@ import { CreatedFormsListComponent } from './components/created-forms-list/creat
 import { SuggestedFormsListComponent } from './components/suggested-forms-list/suggested-forms-list.component';
 import { FillFormComponent } from './components/fill-form/fill-form.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
+import {PieChartModule} from '@swimlane/ngx-charts';
 
 registerLocaleData(uk);
 
@@ -53,23 +54,24 @@ const INTERCEPTOR_PROVIDER: Provider = {
     FillFormComponent,
     StatisticsComponent,
   ],
-  imports: [
-    BrowserModule,
-    SharedModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    ToastNotificationsModule,
-    MsalModule.forRoot({
-      auth: {
-        clientId: environment.clientId,
-        authority: environment.authority,
-        redirectUri: environment.redirectUri
-      }
-    }),
-    AppRoutingModule
-  ],
+    imports: [
+        BrowserModule,
+        SharedModule,
+        FormsModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        ToastNotificationsModule,
+        MsalModule.forRoot({
+            auth: {
+                clientId: environment.clientId,
+                authority: environment.authority,
+                redirectUri: environment.redirectUri
+            }
+        }),
+        AppRoutingModule,
+        PieChartModule
+    ],
   providers: [INTERCEPTOR_PROVIDER],
   bootstrap: [AppComponent]
 })

@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AnswerStatisticDto {
     private Double  value;
-    private String title;
+    private String name;
 }
