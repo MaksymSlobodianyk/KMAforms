@@ -3,6 +3,7 @@ package kma.kmaforms.questionnaire;
 import kma.kmaforms.auth.AuthService;
 import kma.kmaforms.exceptions.AlreadyFilledException;
 import kma.kmaforms.exceptions.ErrorMessages;
+import kma.kmaforms.exceptions.NotEnoughPermissionsException;
 import kma.kmaforms.exceptions.NotFoundException;
 import kma.kmaforms.questionnaire.dto.QuestionnaireCreationDto;
 import kma.kmaforms.questionnaire.dto.QuestionnaireDetailsDto;
@@ -33,7 +34,14 @@ public class QuestionnaireController {
 
     @PostMapping
     public void saveQuestionnaire(@RequestBody QuestionnaireCreationDto questionnaireDto) {
-        questionnaireService.saveQuestionnaire(questionnaireDto, authService.getAuthorizedUser().getEmail());
+        try {
+            questionnaireService.saveQuestionnaire(questionnaireDto, authService.getAuthorizedUser().getEmail());
+        } catch (NotEnoughPermissionsException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }
+        catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }
     }
 
     @PostMapping(value= "/enable")
@@ -41,7 +49,10 @@ public class QuestionnaireController {
         try {
             questionnaireService
                     .enableQuestionnaire(questionnaireId,authService.getAuthorizedUser().getEmail(), true);
-        } catch (NotFoundException e) {
+        } catch (NotEnoughPermissionsException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }
+        catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
         }
     }
@@ -51,24 +62,48 @@ public class QuestionnaireController {
         try {
             questionnaireService
                     .enableQuestionnaire(questionnaireId,authService.getAuthorizedUser().getEmail(), false);
-        } catch (NotFoundException e) {
+        } catch (NotEnoughPermissionsException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }
+        catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
         }
     }
 
     @GetMapping(value = "/all/detail")
     public List<QuestionnaireShortDetailsParticipantsDto> getAllQuestionnairesWParticipants() {
-        return questionnaireService.getAllWParticipants(authService.getAuthorizedUser().getEmail());
+        try {
+            return questionnaireService.getAllWParticipants(authService.getAuthorizedUser().getEmail());
+        } catch (NotEnoughPermissionsException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }
+        catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }
     }
 
     @GetMapping(value = "/all")
     public List<QuestionnaireShortDetailsDto> getAllQuestionnaires() {
-       return questionnaireService.getAll(authService.getAuthorizedUser().getEmail());
+        try {
+            return questionnaireService.getAll(authService.getAuthorizedUser().getEmail());
+        } catch (NotEnoughPermissionsException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }
+        catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }
     }
 
     @GetMapping(value = "/all-t")
     public List<QuestionnaireShortDetailsDto> getAllQuestionnairesTotal() {
-        return questionnaireService.getAllQuestionnaires();
+        try {
+            return questionnaireService.getAllQuestionnaires();
+        } catch (NotEnoughPermissionsException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }
+        catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }
     }
 
     @DeleteMapping()
@@ -76,7 +111,10 @@ public class QuestionnaireController {
     public void deleteQuestionnaireById(@RequestParam UUID questionnaireId){
         try {
             questionnaireService.deleteQuestionnaireById(questionnaireId,authService.getAuthorizedUser().getEmail());
-        } catch (NotFoundException e) {
+        } catch (NotEnoughPermissionsException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }
+        catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
         }
     }

@@ -3,12 +3,13 @@ package kma.kmaforms.answer;
 import kma.kmaforms.answer.dto.AnswerCreationDto;
 import kma.kmaforms.answer.dto.AnswerStatisticDto;
 import kma.kmaforms.answer.model.Answer;
+import kma.kmaforms.auth.AuthService;
 import kma.kmaforms.chapter.ChapterRepository;
 import kma.kmaforms.chapter.dto.ChapterDetailsDto;
+import kma.kmaforms.exceptions.NotEnoughPermissionsException;
 import kma.kmaforms.exceptions.NotFoundException;
 import kma.kmaforms.question.QuestionRepository;
 import kma.kmaforms.question.dto.QuestionStatisticDto;
-import kma.kmaforms.question.dto.QuestionWithAnswerDetailsDto;
 import kma.kmaforms.question.model.Question;
 import kma.kmaforms.questionnaire.QuestionnaireRepository;
 import kma.kmaforms.questionnaire.QuestionnaireService;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 public class AnswerService {
     private AnswerRepository answerRepository;
     private UserService userService;
+    private AuthService authService;
     private QuestionRepository questionRepository;
     private QuestionnaireRepository questionnaireRepository;
     private QuestionnaireService questionnaireService;
@@ -35,11 +37,13 @@ public class AnswerService {
     public AnswerService(AnswerRepository answerRepository,
                          UserService userService,
                          QuestionnaireService questionnaireService,
+                         AuthService authService,
                          QuestionRepository questionRepository,
                          QuestionnaireRepository questionnaireRepository,
                          ChapterRepository chapterRepository) {
         this.answerRepository = answerRepository;
         this.userService = userService;
+        this.authService = authService;
         this.questionnaireRepository = questionnaireRepository;
         this.questionRepository = questionRepository;
         this.questionnaireService = questionnaireService;
@@ -60,7 +64,10 @@ public class AnswerService {
     }
 
     public QuestionnaireDetailsDto getUserQuestionnaireAnswer(UUID questionnaireId, String userEmail)
-            throws NotFoundException {
+            throws NotFoundException, NotEnoughPermissionsException {
+        if (!userService.isAdmin(authService.getAuthorizedUser())) {
+            throw new NotEnoughPermissionsException();
+        }
         Map<UUID, String> answers = new HashMap<>();
         answerRepository.getByQuestionnaireAndAuthor(questionnaireId, userEmail)
                 .forEach(answer -> answers.put(answer.getQuestion().getId(), answer.getAnswer()));
@@ -68,7 +75,10 @@ public class AnswerService {
     }
 
     public QuestionnaireDetailsDto getStatisticForQuestionnaire(UUID questionnaireId, String currentUserEmail)
-            throws NotFoundException {
+            throws NotFoundException, NotEnoughPermissionsException {
+        if (!userService.isAdmin(authService.getAuthorizedUser())) {
+            throw new NotEnoughPermissionsException();
+        }
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
         return QuestionnaireDetailsDto.builder()

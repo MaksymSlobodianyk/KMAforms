@@ -1,13 +1,13 @@
 package kma.kmaforms.questionnaire;
 
 import kma.kmaforms.answer.AnswerRepository;
-import kma.kmaforms.answer.AnswerService;
+import kma.kmaforms.auth.AuthService;
 import kma.kmaforms.chapter.ChapterRepository;
 import kma.kmaforms.chapter.dto.ChapterDetailsDto;
 import kma.kmaforms.chapter.model.Chapter;
 import kma.kmaforms.exceptions.AlreadyFilledException;
+import kma.kmaforms.exceptions.NotEnoughPermissionsException;
 import kma.kmaforms.exceptions.NotFoundException;
-import kma.kmaforms.exceptions.NotFoundUserException;
 import kma.kmaforms.question.QuestionRepository;
 import kma.kmaforms.question.dto.QuestionDetailsDto;
 import kma.kmaforms.question.dto.QuestionWithAnswerDetailsDto;
@@ -37,9 +37,10 @@ public class QuestionnaireService {
     private QuestionRepository questionRepository;
     private AnswerRepository answerRepository;
     private UserService userService;
+    private AuthService authService;
 
     @Autowired
-    public QuestionnaireService(QuestionnaireRepository questionnaireRepository, UserService userService,
+    public QuestionnaireService(QuestionnaireRepository questionnaireRepository, UserService userService, AuthService authService,
                                 ChapterRepository chapterRepository, QuestionRepository questionRepository,
                                 AnswerRepository answerRepository) {
         this.questionnaireRepository = questionnaireRepository;
@@ -47,9 +48,13 @@ public class QuestionnaireService {
         this.chapterRepository = chapterRepository;
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
+        this.authService = authService;
     }
 
-    public void saveQuestionnaire(QuestionnaireCreationDto questionnaireDto, String currentUserEmail) {
+    public void saveQuestionnaire(QuestionnaireCreationDto questionnaireDto, String currentUserEmail) throws NotFoundException, NotEnoughPermissionsException {
+        if (!userService.isAdmin(authService.getAuthorizedUser())) {
+            throw new NotEnoughPermissionsException();
+        }
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var savedQuestionnaire = questionnaireRepository.save(
                 Questionnaire.builder()
@@ -81,7 +86,10 @@ public class QuestionnaireService {
         });
     }
 
-    public List<QuestionnaireShortDetailsDto> getAll(String currentUserEmail) {
+    public List<QuestionnaireShortDetailsDto> getAll(String currentUserEmail) throws NotEnoughPermissionsException, NotFoundException {
+        if (!userService.isAdmin(authService.getAuthorizedUser())) {
+            throw new NotEnoughPermissionsException();
+        }
         var currentUser = userService.getUserByEmail(currentUserEmail);
         return questionnaireRepository.getAllByAuthorOrderByCreatedAtDesc(currentUser)
                 .stream()
@@ -97,7 +105,10 @@ public class QuestionnaireService {
                 .collect(Collectors.toList());
     }
 
-    public List<QuestionnaireShortDetailsDto> getAllQuestionnaires() {
+    public List<QuestionnaireShortDetailsDto> getAllQuestionnaires() throws NotFoundException, NotEnoughPermissionsException {
+        if (!userService.isAdmin(authService.getAuthorizedUser())) {
+            throw new NotEnoughPermissionsException();
+        }
         return questionnaireRepository.getAllQuestionnaires()
                 .stream()
                 .filter(Questionnaire::isActivated)
@@ -113,8 +124,10 @@ public class QuestionnaireService {
                 .collect(Collectors.toList());
     }
 
-    public List<QuestionnaireShortDetailsParticipantsDto> getAllWParticipants(String currentUserEmail) {
-
+    public List<QuestionnaireShortDetailsParticipantsDto> getAllWParticipants(String currentUserEmail) throws NotEnoughPermissionsException, NotFoundException {
+        if (!userService.isAdmin(authService.getAuthorizedUser())) {
+            throw new NotEnoughPermissionsException();
+        }
         var currentUser = userService.getUserByEmail(currentUserEmail);
         return questionnaireRepository.getAllByAuthorOrderByCreatedAtDesc(currentUser)
                 .stream()
@@ -141,7 +154,10 @@ public class QuestionnaireService {
     }
 
     public void deleteQuestionnaireById(UUID questionnaireId, String currentUserEmail)
-            throws NotFoundException{
+            throws NotFoundException, NotEnoughPermissionsException {
+        if (!userService.isAdmin(authService.getAuthorizedUser())) {
+            throw new NotEnoughPermissionsException();
+        }
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
         questionnaireRepository.delete(questionnaire);
@@ -167,7 +183,10 @@ public class QuestionnaireService {
     }
 
     public void enableQuestionnaire(UUID questionnaireId, String currentUserEmail, Boolean enabling)
-            throws NotFoundException {
+            throws NotFoundException, NotEnoughPermissionsException {
+        if (!userService.isAdmin(authService.getAuthorizedUser())) {
+            throw new NotEnoughPermissionsException();
+        }
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
         questionnaire.setActivated(enabling);
@@ -209,7 +228,10 @@ public class QuestionnaireService {
     }
 
     public QuestionnaireDetailsDto getQuestionnaireWithAnswers(UUID questionnaireId, String currentUserEmail, Map<UUID, String> answers)
-            throws NotFoundException{
+            throws NotFoundException, NotEnoughPermissionsException {
+        if (!userService.isAdmin(authService.getAuthorizedUser())) {
+            throw new NotEnoughPermissionsException();
+        }
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
         return QuestionnaireDetailsDto.builder()

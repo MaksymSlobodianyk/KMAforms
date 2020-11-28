@@ -4,6 +4,7 @@ import kma.kmaforms.answer.dto.AnswerCreationDto;
 import kma.kmaforms.auth.AuthService;
 import kma.kmaforms.exceptions.AlreadyFilledException;
 import kma.kmaforms.exceptions.ErrorMessages;
+import kma.kmaforms.exceptions.NotEnoughPermissionsException;
 import kma.kmaforms.exceptions.NotFoundException;
 import kma.kmaforms.questionnaire.QuestionnaireRepository;
 import kma.kmaforms.questionnaire.dto.QuestionnaireDetailsDto;
@@ -44,6 +45,8 @@ public class AnswerController {
             return answerService.getUserQuestionnaireAnswer(questionnaireId, authService.getAuthorizedUser().getEmail());
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }catch (NotEnoughPermissionsException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
         }
 
     }
@@ -54,6 +57,8 @@ public class AnswerController {
             return answerService.getUserQuestionnaireAnswer(questionnaireId, userEmail);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }catch (NotEnoughPermissionsException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
         }
     }
 
@@ -63,6 +68,8 @@ public class AnswerController {
             return answerService.getStatisticForQuestionnaire(questionnaireId,  authService.getAuthorizedUser().getEmail());
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
+        }catch (NotEnoughPermissionsException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
         }
     }
 
