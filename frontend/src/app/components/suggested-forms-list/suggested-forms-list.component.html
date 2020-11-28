@@ -9,8 +9,8 @@
       </mat-card-header>
       <mat-card-content>
         <div class="info-div">
-          <span class="m-2">Created at: {{showDate(quest)}}</span>
-          <span class="m-2">Created by: {{quest.authorDisplayName}}</span>
+          <span class="m-2">Створений: {{showDate(quest)}}</span>
+          <span class="m-2">Автор: {{quest.authorDisplayName}}</span>
         </div>
 
       </mat-card-content>
@@ -21,7 +21,7 @@
           class="mb-4"
           (click)="goFillQ(quest.id)"
         >
-          Fill the questionnaire
+          Заповніть опитник
         </button>
       </mat-card-actions>
     </mat-card>

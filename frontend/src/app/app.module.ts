@@ -19,7 +19,6 @@ import { CreateFormComponent } from './components/create-form/create-form.compon
 import { CreateChapterComponent } from './components/create-form/create-chapter/create-chapter.component';
 import { CreateQuestionComponent } from './components/create-form/create-chapter/create-question/create-question.component';
 import { HeaderComponent } from './components/header/header.component';
-import { FormsListComponent } from './components/forms-list/forms-list.component';
 import { RolesManagementComponent } from './components/roles-management/roles-management.component';
 import { PassedFormsListComponent } from './components/passed-forms-list/passed-forms-list.component';
 import { CreatedFormsListComponent } from './components/created-forms-list/created-forms-list.component';
@@ -46,7 +45,6 @@ const INTERCEPTOR_PROVIDER: Provider = {
     CreateQuestionComponent,
     MainPageComponent,
     HeaderComponent,
-    FormsListComponent,
     RolesManagementComponent,
     PassedFormsListComponent,
     CreatedFormsListComponent,

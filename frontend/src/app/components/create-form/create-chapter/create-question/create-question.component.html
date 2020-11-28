@@ -8,13 +8,13 @@
           appearance="standard"
           class="long-input"
         >
-          <mat-label>Question's title</mat-label>
+          <mat-label>Заголовок питання</mat-label>
           <input matInput placeholder="Chapter's name" [formControlName]="'title'">
-          <mat-error *ngIf="item2.get('title').invalid">Question's title is required</mat-error>
+          <mat-error *ngIf="item2.get('title').invalid">Поле заголовок питання є обов'язковим</mat-error>
         </mat-form-field>
 
         <div class="p-3">
-          <h4>Answers</h4>
+          <h4>Варіанти відповідей</h4>
 
           <div [formArrayName]="'answers'"
                *ngFor="let item3 of answers(item2).controls; let k = index;"
@@ -24,8 +24,8 @@
               class="medium-input"
             >
               <mat-label>Answer's title</mat-label>
-              <input matInput placeholder="Answer's title" [formControl]="answers(item2).controls[k]">
-              <mat-error *ngIf="item2.get('title').invalid">Answer's title is required</mat-error>
+              <input matInput placeholder="Текст відповіді" [formControl]="answers(item2).controls[k]">
+              <mat-error *ngIf="item2.get('title').invalid">Поле текст відповіді є обов'язковим</mat-error>
             </mat-form-field>
           </div>
 
@@ -34,7 +34,7 @@
                   (click)="addAnswer(item2)"
                   [disabled]="invalidPrevAnswers(item2)"
           >
-            Add answer
+            Додати відповідь
           </button>
           <button mat-raised-button
                   color="accent"
@@ -42,7 +42,7 @@
                   (click)="removeAnswer(item2)"
                   [disabled]="only2Answers(item2)"
           >
-            Remove answer
+            Видалити відповідь
           </button>
         </div>
       </div>
@@ -52,28 +52,28 @@
           class="long-input"
         >
           <mat-label>Question's title</mat-label>
-          <input matInput placeholder="Chapter's name" [formControlName]="'title'">
+          <input matInput placeholder="Назва розділу" [formControlName]="'title'">
           <mat-error *ngIf="item2.get('title').invalid">Question's title is required</mat-error>
         </mat-form-field>
         <div>
           <mat-form-field
             appearance="standard"
           >
-            <mat-label>Answer's min length</mat-label>
+            <mat-label>Мінімальна довжина відповіді</mat-label>
             <input [type]="'number'" matInput
-                   placeholder="Answer's min length"
+                   placeholder="Мінімальна довжина відповіді"
                    [formControlName]="'minLength'">
-            <mat-error *ngIf="item2.get('minLength').invalid">Answer's min length is required and > 0</mat-error>
+            <mat-error *ngIf="item2.get('minLength').invalid">Поле мінімальної довжини відповіді є обов'язковим і має мати значення, що більше за 0</mat-error>
           </mat-form-field>
           <mat-form-field
             appearance="standard"
             class="m-3"
           >
-            <mat-label>Answer's max length</mat-label>
+            <mat-label>Максимальна довжина відповіді</mat-label>
             <input [type]="'number'" matInput
-                   placeholder="Answer's max length"
+                   placeholder="Максимальна довжина відповіді"
                    [formControlName]="'maxLength'">
-            <mat-error *ngIf="item2.get('maxLength').invalid">Answer's max length is required and < 1000</mat-error>
+            <mat-error *ngIf="item2.get('maxLength').invalid">Поле максимальної довжини відповіді є обов'язковим і має мати значення, що меншим за 1000</mat-error>
           </mat-form-field>
         </div>
 
@@ -83,29 +83,29 @@
           appearance="standard"
           class="long-input"
         >
-          <mat-label>Question's title</mat-label>
-          <input matInput placeholder="Chapter's name" [formControlName]="'title'">
-          <mat-error *ngIf="item2.get('title').invalid">Question's title is required</mat-error>
+          <mat-label>Заголовок питання</mat-label>
+          <input matInput placeholder="Назва розділу" [formControlName]="'title'">
+          <mat-error *ngIf="item2.get('title').invalid">Поле заголовку питання є обов'язковим</mat-error>
         </mat-form-field>
         <div>
           <mat-form-field
             appearance="standard"
           >
-            <mat-label>Minimum of range</mat-label>
+            <mat-label>Мінімальне значення шкали</mat-label>
             <input [type]="'number'" matInput
-                   placeholder="Minimum of range"
+                   placeholder="Мінімальне значення шкали"
                    [formControlName]="'min'">
-            <mat-error *ngIf="item2.get('min').invalid">Minimum of range is required</mat-error>
+            <mat-error *ngIf="item2.get('min').invalid">Поле мінімальне значення шкали є обов'язковим</mat-error>
           </mat-form-field>
           <mat-form-field
             appearance="standard"
             class="m-3"
           >
-            <mat-label>Maximum of range</mat-label>
+            <mat-label>Максимальне значення шкали</mat-label>
             <input [type]="'number'" matInput
-                   placeholder="Maximum of range"
+                   placeholder="Максимальне значення шкали"
                    [formControlName]="'max'">
-            <mat-error *ngIf="item2.get('max').invalid">Maximum of range is required</mat-error>
+            <mat-error *ngIf="item2.get('max').invalid">Поле максимальне значення шкали є обов'язковим</mat-error>
           </mat-form-field>
         </div>
 

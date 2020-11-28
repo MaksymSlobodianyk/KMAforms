@@ -8,7 +8,7 @@
         <mat-card-title>{{quest.title}}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <span>Created at: {{showDate(quest)}}</span>
+        <span>Створений: {{showDate(quest)}}</span>
       </mat-card-content>
       <mat-card-actions>
         <mat-slide-toggle
@@ -26,7 +26,7 @@
           class="mb-4"
           (click)="reviewQuest(quest.id)"
         >
-          Review the structure
+          Переглянути структуру
         </button>
         <button
           mat-raised-button
@@ -34,7 +34,7 @@
           class="mb-4"
           (click)="shareLink(quest.id)"
         >
-          Share questionnaire
+          Поширити опитник
         </button>
 
         <button
@@ -43,7 +43,7 @@
           class="mb-4"
           (click)="goViewStat(quest.id)"
         >
-          Review statistics
+          Переглянути статистику
         </button>
 
         <button
@@ -52,7 +52,7 @@
           class="mb-2"
           (click)="deleteQuest(quest.id)"
         >
-          Delete questionnaire
+          Видалити опитник
         </button>
       </mat-card-actions>
     </mat-card>

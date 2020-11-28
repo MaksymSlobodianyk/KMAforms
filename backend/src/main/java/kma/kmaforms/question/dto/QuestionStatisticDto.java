@@ -17,5 +17,5 @@ public class QuestionStatisticDto extends QuestionDto {
     private UUID id;
     private String title;
     private String type;
-    private List<AnswerStatisticDto> answers;
+    private List<AnswerStatisticDto> answer;
 }

@@ -19,7 +19,7 @@
           <h5>{{questionnaire.chapters[i].description}}</h5>
           <div class="col-styling ml-3">
 
-            <h5>Questions</h5>
+            <h5>Питання:</h5>
             <div [formArrayName]="'answers'"
                  class="ml-3"
                  *ngFor="let answer of answers(chapter).controls; let j = index;"
@@ -56,7 +56,7 @@
                     <mat-label>{{question(i,j).title}}</mat-label>
                     <input matInput placeholder="Answer's title" [formControlName]="j">
                     <mat-error *ngIf="answer.invalid">
-                      Answer's length must be from {{question(i,j).minLength}} to {{question(i,j).maxLength}}
+                      відповідь повинна бути довжиною від{{question(i,j).minLength}} до {{question(i,j).maxLength}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -71,7 +71,7 @@
                   >
                     <input type="number" matInput placeholder="Answer's title" [formControlName]="j">
                     <mat-error *ngIf="answer.invalid">
-                      Answer must be in the range of {{question(i,j).min}} - {{question(i,j).max}}
+                      Відповідь повинна бути в межах шкали {{question(i,j).min}} - {{question(i,j).max}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -87,7 +87,7 @@
                   [disabled]="(!blankViewOnly && chapter.invalid) || isLastChapter(i)"
                   matStepperNext
           >
-            Next chapter
+            Наступний розділ
           </button>
 
           <button mat-raised-button
@@ -96,7 +96,7 @@
                   [disabled]="i === 0"
                   matStepperPrevious
           >
-            Prev chapter
+            Попередній розділ
           </button>
         </mat-step>
       </div>
@@ -109,7 +109,7 @@
             (click)="saveForm()"
             [disabled]="form.invalid"
     >
-      Save form
+      Зберегти форму
     </button>
 
   </form>

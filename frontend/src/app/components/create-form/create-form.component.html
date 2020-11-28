@@ -4,11 +4,11 @@
       appearance="standard"
       class="long-input"
     >
-      <mat-label>Name of form</mat-label>
+      <mat-label>Назва опитника</mat-label>
       <input matInput
-             placeholder="Form's name"
+             placeholder="Назва опитника"
              [formControlName]="'title'">
-      <mat-error *ngIf="form.get('title').invalid">Name of form is required</mat-error>
+      <mat-error *ngIf="form.get('title').invalid">Назва опитника є обов'язковим полем</mat-error>
     </mat-form-field>
 
     <app-create-chapter [form]="form"></app-create-chapter>
@@ -18,7 +18,7 @@
             (click)="addChapter()"
             [disabled]="form.invalid"
     >
-      Add chapter
+      Додати розділ
     </button>
 
     <button mat-raised-button
@@ -27,7 +27,7 @@
             (click)="removeChapter()"
             [disabled]="isLastChapter"
     >
-      Remove last chapter
+      Видалити останній розділ
     </button>
 
     <button mat-raised-button
@@ -36,7 +36,7 @@
             (click)="saveForm()"
             [disabled]="form.invalid"
     >
-      Save form
+      Зберегти опитник
     </button>
 
   </form>

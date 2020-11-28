@@ -36,7 +36,7 @@ export class CreatedFormsListComponent implements OnInit {
   }
 
   public labelAction(isActive: boolean) {
-    return isActive ? 'Deactivate' : 'Activate';
+    return isActive ? 'Активний' : 'Не активний';
   }
 
   public showDate(questionnaire: Questionnaire) {

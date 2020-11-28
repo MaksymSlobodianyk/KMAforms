@@ -14,21 +14,21 @@
             appearance="standard"
             class="medium-input"
           >
-            <mat-label>Name of chapter</mat-label>
-            <input matInput placeholder="Chapter's name" [formControlName]="'title'">
-            <mat-error *ngIf="item.get('title').invalid">Name of chapter is required</mat-error>
+            <mat-label>Назва розділа</mat-label>
+            <input matInput placeholder="Назва розділа" [formControlName]="'title'">
+            <mat-error *ngIf="item.get('title').invalid">Поле назва розділа є обов'язковим</mat-error>
           </mat-form-field>
 
           <mat-form-field
             appearance="standard"
             class="long-input"
           >
-            <mat-label>Description of chapter</mat-label>
-            <input matInput placeholder="Chapter's description" [formControlName]="'description'">
-            <mat-error *ngIf="item.get('description').invalid">Name of chapter is required</mat-error>
+            <mat-label>Опис розділа</mat-label>
+            <input matInput placeholder="Опис розділа" [formControlName]="'description'">
+            <mat-error *ngIf="item.get('description').invalid">Поле опис розділа є обов'язковим</mat-error>
           </mat-form-field>
 
-          <h3>Questions:</h3>
+          <h3>Запитання:</h3>
 
           <app-create-question [chapter]="item"></app-create-question>
 
@@ -38,7 +38,7 @@
                     (click)="addQuestion(item, 'oneOf')"
                     [disabled]="chapterIsInvalid(item)"
             >
-              Add a "choose one" question
+              Додати питання "вибір з одного"
             </button>
 
             <button mat-raised-button
@@ -47,7 +47,7 @@
                     (click)="addQuestion(item, 'open')"
                     [disabled]="chapterIsInvalid(item)"
             >
-              Add an open question
+              Додати питання "відкрита відповідь"
             </button>
 
             <button mat-raised-button
@@ -56,7 +56,7 @@
                     (click)="addQuestion(item, 'range')"
                     [disabled]="chapterIsInvalid(item)"
             >
-              Add a "range" question
+              Додати питання "шкала"
             </button>
 
             <button mat-raised-button
@@ -65,7 +65,7 @@
                     (click)="deleteLastQuestion(item)"
                     [disabled]="isNoQuestion(item)"
             >
-              Delete last question
+              Видалити останнє питання
             </button>
           </div>
         </div>
