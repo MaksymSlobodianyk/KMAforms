@@ -91,7 +91,7 @@ public class AnswerService {
                                                         .id(question.getId())
                                                         .title(question.getTitle())
                                                         .type(question.getType())
-                                                        .answers(processQuestionAnswersToStatistic(question))
+                                                        .answer(processQuestionAnswersToStatistic(question))
                                                         .build())
                                                 .collect(Collectors.toList()))
                                         .build()
