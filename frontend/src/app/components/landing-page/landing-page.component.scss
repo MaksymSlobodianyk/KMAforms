@@ -1,0 +1,22 @@
+.button-container{
+  max-width: 30%;
+  min-height: 100%;
+  background: white;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.image-container{
+  background-image: url(../../../assets/77551791e3855bdfd25536c03f60ae65.webp);
+  max-width: 100%;
+  min-height: 100%;
+  background-size:cover;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: -270px;
+}

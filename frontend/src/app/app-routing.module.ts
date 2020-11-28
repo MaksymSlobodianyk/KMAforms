@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 import {LandingPageComponent} from './components/landing-page/landing-page.component';
 import {MainPageComponent} from './components/main-page/main-page.component';
 import {AuthGuard} from './guards/auth.guard';
@@ -9,8 +9,9 @@ import {RolesManagementComponent} from './components/roles-management/roles-mana
 import {PassedFormsListComponent} from './components/passed-forms-list/passed-forms-list.component';
 import {SuggestedFormsListComponent} from './components/suggested-forms-list/suggested-forms-list.component';
 import {FillFormComponent} from './components/fill-form/fill-form.component';
-import {AuthAdminGuard} from "./guards/auth-admin.guard";
-import {CreatedFormsListComponent} from "./components/created-forms-list/created-forms-list.component";
+import {AuthAdminGuard} from './guards/auth-admin.guard';
+import {CreatedFormsListComponent} from './components/created-forms-list/created-forms-list.component';
+import {StatisticsComponent} from './components/statistics/statistics.component';
 
 const mainPageChildRoutes = [
   {
@@ -49,6 +50,11 @@ const mainPageChildRoutes = [
     path: 'review/:id',
     component: FillFormComponent,
     canActivate: [AuthAdminGuard]
+  },
+  {
+    path: 'statistics/:id',
+    component: StatisticsComponent,
+    canActivate: [AuthAdminGuard]
   }
 ];
 
@@ -75,4 +81,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
