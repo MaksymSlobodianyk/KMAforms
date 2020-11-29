@@ -96,14 +96,7 @@ public class QuestionnaireController {
 
     @GetMapping(value = "/all-t")
     public List<QuestionnaireShortDetailsDto> getAllQuestionnairesTotal() {
-        try {
-            return questionnaireService.getAllQuestionnaires();
-        } catch (NotEnoughPermissionsException e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
-        }
-        catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessages.QUESTIONNAIRE_NOT_FOUND, e);
-        }
+        return questionnaireService.getAllQuestionnaires(authService.getAuthorizedUser().getEmail());
     }
 
     @DeleteMapping()

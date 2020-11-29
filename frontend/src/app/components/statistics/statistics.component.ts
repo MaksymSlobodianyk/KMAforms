@@ -23,7 +23,6 @@ export class StatisticsComponent implements OnInit {
   ngOnInit(): void {
     this.formApiService.getStatisticForQuestionnaire(this.route.snapshot.params.id).subscribe(data => {
       this.questionnaire = data;
-      console.log(this.questionnaire);
     }, error => {
       this.toaster.open({
         caption: '😢   Упс... Нам не вдалося сформувати статистику',

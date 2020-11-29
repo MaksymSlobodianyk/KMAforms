@@ -105,13 +105,12 @@ public class QuestionnaireService {
                 .collect(Collectors.toList());
     }
 
-    public List<QuestionnaireShortDetailsDto> getAllQuestionnaires() throws NotFoundException, NotEnoughPermissionsException {
-        if (!userService.isAdmin(authService.getAuthorizedUser())) {
-            throw new NotEnoughPermissionsException();
-        }
+    public List<QuestionnaireShortDetailsDto> getAllQuestionnaires(String currentUserEmail) {
+        var currentUser = userService.getUserByEmail(currentUserEmail);
         return questionnaireRepository.getAllQuestionnaires()
                 .stream()
                 .filter(Questionnaire::isActivated)
+                .filter(q -> !checkIfAlreadyAnswered(currentUser, q))
                 .map(questionnaire -> QuestionnaireShortDetailsDto
                         .builder()
                         .id(questionnaire.getId())
@@ -164,8 +163,7 @@ public class QuestionnaireService {
     }
 
 
-    public void checkIfAlreadyAnswered(User user, Questionnaire questionnaire)
-            throws AlreadyFilledException {
+    public Boolean checkIfAlreadyAnswered(User user, Questionnaire questionnaire) {
         var question = chapterRepository
                 .getAllByQuestionnaire(questionnaire)
                 .stream().findFirst()
@@ -176,10 +174,9 @@ public class QuestionnaireService {
         if (question.isPresent()) {
             var a = answerRepository
                     .getByQuestionAndAuthor(question.get(), user);
-            if (a.isPresent()) {
-                throw new AlreadyFilledException();
-            }
+            return a.isPresent();
         }
+        return false;
     }
 
     public void enableQuestionnaire(UUID questionnaireId, String currentUserEmail, Boolean enabling)
@@ -197,7 +194,7 @@ public class QuestionnaireService {
             throws NotFoundException, AlreadyFilledException{
         var currentUser = userService.getUserByEmail(currentUserEmail);
         var questionnaire = questionnaireRepository.getByIdAndAuthor(questionnaireId, currentUser).orElseThrow(NotFoundException::new);
-        if (!viewOnly) checkIfAlreadyAnswered(currentUser, questionnaire);
+        if (!viewOnly && checkIfAlreadyAnswered(currentUser, questionnaire)) throw new AlreadyFilledException();
         return QuestionnaireDetailsDto.builder()
                 .id(questionnaire.getId())
                 .title(questionnaire.getTitle())

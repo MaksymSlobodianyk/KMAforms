@@ -27,7 +27,7 @@
                 >
                   <ngx-charts-advanced-pie-chart
                     [view]="[700, 400]"
-                    [results]="question.answers"
+                    [results]="question.answer"
                   >
                   </ngx-charts-advanced-pie-chart>
                 </div>
@@ -53,7 +53,10 @@
 </div>
 
 
-<div *ngIf="questionnaire&&questionnaire.chapters[0].questions[0].answer.length===0">
+<div
+  class="row align-content-center justify-content-center"
+  *ngIf="questionnaire&&questionnaire.chapters[0].questions[0].answer.length===0"
+>
   На ваш опитник ще не дали жодної відповіді😢
 </div>
 <div

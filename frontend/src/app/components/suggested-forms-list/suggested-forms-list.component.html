@@ -28,6 +28,12 @@
   </div>
 </div>
 
+<div class="row justify-content-center align-items-center"
+     *ngIf="questionnaires &&questionnaires.length===0"
+>
+  Ви молодець, Ви пройшли всі запропоновані опитники😃
+</div>
+
 <div
   class="container-fluid d-flex justify-content-center m-5"
   *ngIf="!questionnaires"
